@@ -8,6 +8,11 @@ app/
 │       ├── [slug]/
 │       │   └── page.tsx  (URL: /blog/my-post)
 │       └── page.tsx      (URL: /blog)
+├── components/           <-- UI Building Blocks
+│   ├── ui/               <-- Generic components (Buttons, Inputs, Cards)
+│   ├── home/             <-- Feature-specific (HeroBanner, Stats, etc.)
+│   │   └── hero-banner.tsx
+│   └── shared/
 │
 ├── (auth)/               <-- Focused Auth Layout (No distractions)
 │   ├── layout.tsx        (Centered card, Logo only)
@@ -35,4 +40,6 @@ app/
 │       └── exercises/              
 │           └── page.tsx      (URL: /admin/exercises)
 │
-└── layout.tsx            <-- Global Root Layout (Only HTML/Body & Providers)   
+├── layout.tsx            <-- Global Root Layout (Only HTML/Body & Providers)  
+├── lib/                  <-- Shared utilities (Supabase client, Utils)
+├── hooks/ 
