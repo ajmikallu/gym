@@ -18,8 +18,9 @@ app/
 │
 ├── (user)/          <-- Logged-in User Experience
 │   ├── layout.tsx        (Sidebar, User Nav, Notifications)
-│   └── [slug]/              
-│       └── page.tsx      (URL: /user/slug)  
+│   └── user/
+│       └── [slug]/              
+│           └── page.tsx      (URL: /user/slug) 
 │   └── dashboard/        
 │       └── page.tsx      (URL: /dashboard)
 │   └── settings/
