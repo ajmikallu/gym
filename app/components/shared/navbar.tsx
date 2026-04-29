@@ -49,10 +49,9 @@ export default function Navbar() {
                 <NavigationMenuContent>
                   <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-black/95 backdrop-blur-md border border-white/10">
                     <li className="row-span-3">
-                      <NavigationMenuLink asChild>
-                        <a
+                      <Link href="/" legacyBehavior passHref>
+                        <NavigationMenuLink
                           className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-red-600/50 to-red-900/50 p-6 no-underline outline-none focus:shadow-md"
-                          href="/"
                         >
                           <Dumbbell className="h-6 w-6 text-white mb-2" />
                           <div className="mb-2 mt-4 text-lg font-bold text-white uppercase italic">
@@ -61,28 +60,28 @@ export default function Navbar() {
                           <p className="text-sm leading-tight text-gray-300">
                             Experience world-class equipment and elite coaching.
                           </p>
-                        </a>
-                      </NavigationMenuLink>
+                        </NavigationMenuLink>
+                      </Link>
                     </li>
                     <li>
-                      <NavigationMenuLink asChild>
-                        <a href="/about" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 focus:bg-white/10">
+                      <Link href="/about" legacyBehavior passHref>
+                        <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 focus:bg-white/10">
                           <div className="text-sm font-semibold leading-none text-white uppercase">Our Story</div>
                           <p className="line-clamp-2 text-sm leading-snug text-gray-400 mt-1">
                             Learn about how we started and our mission to elevate performance.
                           </p>
-                        </a>
-                      </NavigationMenuLink>
+                        </NavigationMenuLink>
+                      </Link>
                     </li>
                     <li>
-                      <NavigationMenuLink asChild>
-                        <a href="/about/trainers" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 focus:bg-white/10">
+                      <Link href="/about/trainers" legacyBehavior passHref>
+                        <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 focus:bg-white/10">
                           <div className="text-sm font-semibold leading-none text-white uppercase">Trainers</div>
                           <p className="line-clamp-2 text-sm leading-snug text-gray-400 mt-1">
                             Meet our elite team of professional coaches.
                           </p>
-                        </a>
-                      </NavigationMenuLink>
+                        </NavigationMenuLink>
+                      </Link>
                     </li>
                   </ul>
                 </NavigationMenuContent>
