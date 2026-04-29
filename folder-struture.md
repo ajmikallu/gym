@@ -9,10 +9,14 @@ app/
 │       │   └── page.tsx  (URL: /blog/my-post)
 │       └── page.tsx      (URL: /blog)
 ├── components/           <-- UI Building Blocks
-│   ├── ui/               <-- Generic components (Buttons, Inputs, Cards)
+│   ├── ui/               <-- Generic components (shadcn/ui)
+│   │   ├── button.tsx
+│   │   ├── carousel.tsx
+│   │   └── navigation-menu.tsx
 │   ├── home/             <-- Feature-specific (HeroBanner, Stats, etc.)
 │   │   └── hero-banner.tsx
-│   └── shared/
+│   └── shared/           <-- Shared across layouts
+│       └── navbar.tsx
 │
 ├── (auth)/               <-- Focused Auth Layout (No distractions)
 │   ├── layout.tsx        (Centered card, Logo only)
@@ -43,4 +47,6 @@ app/
 ├── layout.tsx            <-- Global Root Layout (Only HTML/Body & Providers)  
 ├── page.tsx
 ├── lib/                  <-- Shared utilities (Supabase client, Utils)
+│   └── utils.ts          <-- Utility functions (cn, twMerge)
 ├── hooks/ 
+├── components.json       <-- Shadcn UI configuration
