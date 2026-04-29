@@ -23,7 +23,7 @@ export default function HeroBanner({ imageIndex = 1 }: HeroBannerProps) {
   const images = Array.from({ length: 7 }, (_, i) => i + 1);
 
   return (
-    <section className="relative w-full h-[60vh] md:h-[85vh] overflow-hidden group bg-gray-100 dark:bg-zinc-900 transition-colors duration-500">
+    <section className="relative w-full h-[75vh] md:h-screen overflow-hidden group bg-gray-100 dark:bg-zinc-900 transition-colors duration-500">
       <Carousel
         plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
         className="w-full h-full"
@@ -34,7 +34,7 @@ export default function HeroBanner({ imageIndex = 1 }: HeroBannerProps) {
       >
         <CarouselContent className="h-full -ml-0">
           {images.map((index) => (
-            <CarouselItem key={index} className="relative w-full h-[60vh] md:h-[85vh] pl-0">
+            <CarouselItem key={index} className="relative w-full h-[75vh] md:h-screen pl-0">
               {/* Background Image */}
               <Image
                 src={`/images/hero/hero-banner-${index}.png`}
