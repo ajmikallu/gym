@@ -23,7 +23,7 @@ export default function HeroBanner({ imageIndex = 1 }: HeroBannerProps) {
   const images = Array.from({ length: 7 }, (_, i) => i + 1);
 
   return (
-    <section className="relative w-full h-[60vh] md:h-[85vh] overflow-hidden group bg-zinc-900">
+    <section className="relative w-full h-[60vh] md:h-[85vh] overflow-hidden group bg-gray-100 dark:bg-zinc-900 transition-colors duration-500">
       <Carousel
         plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
         className="w-full h-full"
@@ -47,19 +47,19 @@ export default function HeroBanner({ imageIndex = 1 }: HeroBannerProps) {
               />
 
               {/* Gradient Overlay for Text Readability */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent z-10" />
+              <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 dark:from-black/90 dark:via-black/50 to-transparent z-10 transition-colors duration-500" />
             </CarouselItem>
           ))}
         </CarouselContent>
       </Carousel>
 
       {/* Content */}
-      <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 md:px-12 lg:px-24 max-w-7xl mx-auto w-full text-white pointer-events-none">
+      <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 md:px-12 lg:px-24 max-w-7xl mx-auto w-full text-black dark:text-white pointer-events-none transition-colors duration-500">
         <div className="pointer-events-auto">
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 uppercase italic">
             Elevate Your <span className="text-red-600">Performance</span>
           </h1>
-          <p className="text-lg md:text-2xl text-gray-200 mb-8 max-w-2xl font-medium leading-relaxed">
+          <p className="text-lg md:text-2xl text-gray-700 dark:text-gray-200 mb-8 max-w-2xl font-medium leading-relaxed transition-colors duration-500">
             Experience world-class equipment, elite coaching, and a driven community that pushes you beyond your limits.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -71,7 +71,7 @@ export default function HeroBanner({ imageIndex = 1 }: HeroBannerProps) {
             </Link>
             <Link
               href="/about"
-              className="inline-flex justify-center items-center px-10 py-4 text-base font-bold text-white bg-transparent border-2 border-white hover:bg-white hover:text-black transition-all rounded-sm uppercase tracking-wider"
+              className="inline-flex justify-center items-center px-10 py-4 text-base font-bold text-black dark:text-white bg-transparent border-2 border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all rounded-sm uppercase tracking-wider"
             >
               Our Memberships
             </Link>

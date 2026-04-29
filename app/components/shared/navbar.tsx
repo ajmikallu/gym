@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Menu, X, Dumbbell } from "lucide-react";
+import { ThemeToggle } from "@/app/components/shared/theme-toggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -19,13 +20,13 @@ export default function Navbar() {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+    <header className="fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-200 dark:border-white/10 transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 h-20 flex items-center justify-between">
         
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group" onClick={closeMenu}>
           <Dumbbell className="w-8 h-8 text-red-600 transition-transform group-hover:-rotate-12" />
-          <span className="text-2xl font-extrabold tracking-tighter text-white uppercase italic">
+          <span className="text-2xl font-extrabold tracking-tighter text-black dark:text-white uppercase italic transition-colors duration-500">
             Apex<span className="text-red-600">Fit</span>
           </span>
         </Link>
@@ -36,18 +37,18 @@ export default function Navbar() {
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
                 <Link href="/" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle() + " bg-transparent hover:bg-white/10 text-gray-300 hover:text-white focus:bg-white/10 focus:text-white text-sm font-semibold uppercase tracking-wider"}>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle() + " bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white focus:bg-black/5 dark:focus:bg-white/10 focus:text-black dark:focus:text-white text-sm font-semibold uppercase tracking-wider transition-colors"}>
                     Home
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent hover:bg-white/10 text-gray-300 hover:text-white focus:bg-white/10 focus:text-white data-[state=open]:bg-white/10 data-[state=open]:text-white text-sm font-semibold uppercase tracking-wider">
+                <NavigationMenuTrigger className="bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white focus:bg-black/5 dark:focus:bg-white/10 focus:text-black dark:focus:text-white data-[state=open]:bg-black/5 dark:data-[state=open]:bg-white/10 data-[state=open]:text-black dark:data-[state=open]:text-white text-sm font-semibold uppercase tracking-wider transition-colors">
                   About
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-black/95 backdrop-blur-md border border-white/10">
+                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-white dark:bg-black/95 backdrop-blur-md border border-gray-200 dark:border-white/10 transition-colors">
                     <li className="row-span-3">
                       <Link href="/" legacyBehavior passHref>
                         <NavigationMenuLink
@@ -57,7 +58,7 @@ export default function Navbar() {
                           <div className="mb-2 mt-4 text-lg font-bold text-white uppercase italic">
                             ApexFit
                           </div>
-                          <p className="text-sm leading-tight text-gray-300">
+                          <p className="text-sm leading-tight text-white/90">
                             Experience world-class equipment and elite coaching.
                           </p>
                         </NavigationMenuLink>
@@ -65,9 +66,9 @@ export default function Navbar() {
                     </li>
                     <li>
                       <Link href="/about" legacyBehavior passHref>
-                        <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 focus:bg-white/10">
-                          <div className="text-sm font-semibold leading-none text-white uppercase">Our Story</div>
-                          <p className="line-clamp-2 text-sm leading-snug text-gray-400 mt-1">
+                        <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/5 dark:hover:bg-white/10 focus:bg-black/5 dark:focus:bg-white/10">
+                          <div className="text-sm font-semibold leading-none text-black dark:text-white uppercase transition-colors">Our Story</div>
+                          <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400 mt-1 transition-colors">
                             Learn about how we started and our mission to elevate performance.
                           </p>
                         </NavigationMenuLink>
@@ -75,9 +76,9 @@ export default function Navbar() {
                     </li>
                     <li>
                       <Link href="/about/trainers" legacyBehavior passHref>
-                        <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 focus:bg-white/10">
-                          <div className="text-sm font-semibold leading-none text-white uppercase">Trainers</div>
-                          <p className="line-clamp-2 text-sm leading-snug text-gray-400 mt-1">
+                        <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/5 dark:hover:bg-white/10 focus:bg-black/5 dark:focus:bg-white/10">
+                          <div className="text-sm font-semibold leading-none text-black dark:text-white uppercase transition-colors">Trainers</div>
+                          <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400 mt-1 transition-colors">
                             Meet our elite team of professional coaches.
                           </p>
                         </NavigationMenuLink>
@@ -89,7 +90,7 @@ export default function Navbar() {
 
               <NavigationMenuItem>
                 <Link href="/blog" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle() + " bg-transparent hover:bg-white/10 text-gray-300 hover:text-white focus:bg-white/10 focus:text-white text-sm font-semibold uppercase tracking-wider"}>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle() + " bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white focus:bg-black/5 dark:focus:bg-white/10 focus:text-black dark:focus:text-white text-sm font-semibold uppercase tracking-wider transition-colors"}>
                     Blog
                   </NavigationMenuLink>
                 </Link>
@@ -100,7 +101,8 @@ export default function Navbar() {
 
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/login" className="text-sm font-semibold text-white hover:text-gray-300 transition-colors uppercase tracking-wider">
+          <ThemeToggle />
+          <Link href="/login" className="text-sm font-semibold text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors uppercase tracking-wider">
             Login
           </Link>
           <Link href="/register" className="px-6 py-2.5 text-sm font-bold text-white bg-red-600 hover:bg-red-700 transition-all rounded-sm uppercase tracking-wider">
@@ -109,29 +111,32 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Toggle */}
-        <button 
-          className="md:hidden text-white p-2"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Menu"
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex md:hidden items-center gap-2">
+          <ThemeToggle />
+          <button 
+            className="text-black dark:text-white p-2 transition-colors"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle Menu"
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden absolute top-20 left-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 flex flex-col px-6 py-4 gap-4 shadow-xl">
-          <Link href="/" className="text-lg font-semibold text-gray-300 hover:text-white transition-colors uppercase" onClick={closeMenu}>
+        <div className="md:hidden absolute top-20 left-0 w-full bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-gray-200 dark:border-white/10 flex flex-col px-6 py-4 gap-4 shadow-xl transition-colors duration-500">
+          <Link href="/" className="text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors uppercase" onClick={closeMenu}>
             Home
           </Link>
-          <Link href="/about" className="text-lg font-semibold text-gray-300 hover:text-white transition-colors uppercase" onClick={closeMenu}>
+          <Link href="/about" className="text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors uppercase" onClick={closeMenu}>
             About
           </Link>
-          <Link href="/blog" className="text-lg font-semibold text-gray-300 hover:text-white transition-colors uppercase" onClick={closeMenu}>
+          <Link href="/blog" className="text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors uppercase" onClick={closeMenu}>
             Blog
           </Link>
-          <hr className="border-white/10 my-2" />
-          <Link href="/login" className="text-lg font-semibold text-white transition-colors uppercase" onClick={closeMenu}>
+          <hr className="border-gray-200 dark:border-white/10 my-2 transition-colors duration-500" />
+          <Link href="/login" className="text-lg font-semibold text-black dark:text-white transition-colors uppercase" onClick={closeMenu}>
             Login
           </Link>
           <Link href="/register" className="px-6 py-3 text-center text-base font-bold text-white bg-red-600 rounded-sm uppercase tracking-wider mt-2" onClick={closeMenu}>
