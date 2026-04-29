@@ -1,3 +1,4 @@
+import HeroBanner from "@/components/home/hero-banner";
 export default function Page() {
-  return <div>app/(public)/page.tsx</div>;
+  return <HeroBanner imageIndex={2} />;
 }

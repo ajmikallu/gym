@@ -41,5 +41,6 @@ app/
 │           └── page.tsx      (URL: /admin/exercises)
 │
 ├── layout.tsx            <-- Global Root Layout (Only HTML/Body & Providers)  
+├── page.tsx
 ├── lib/                  <-- Shared utilities (Supabase client, Utils)
 ├── hooks/ 
