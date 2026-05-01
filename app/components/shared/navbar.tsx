@@ -50,7 +50,7 @@ export default function Navbar() {
                 <NavigationMenuContent>
                   <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-white dark:bg-black/95 backdrop-blur-md border border-gray-200 dark:border-white/10 transition-colors">
                     <li className="row-span-3">
-                      <Link href="/" legacyBehavior passHref>
+                      <Link href="/about/facility" legacyBehavior passHref>
                         <NavigationMenuLink
                           className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-red-600/50 to-red-900/50 p-6 no-underline outline-none focus:shadow-md"
                         >
@@ -130,7 +130,13 @@ export default function Navbar() {
             Home
           </Link>
           <Link href="/about" className="text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors uppercase" onClick={closeMenu}>
-            About
+            About Us
+          </Link>
+          <Link href="/about/trainers" className="text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors uppercase" onClick={closeMenu}>
+            Trainers
+          </Link>
+          <Link href="/about/facility" className="text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors uppercase" onClick={closeMenu}>
+            Facility
           </Link>
           <Link href="/blog" className="text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors uppercase" onClick={closeMenu}>
             Blog
