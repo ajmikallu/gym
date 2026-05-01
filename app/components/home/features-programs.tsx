@@ -1,5 +1,6 @@
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Activity, Dumbbell, Apple } from "lucide-react";
 
 export default function FeaturesPrograms() {
@@ -8,19 +9,22 @@ export default function FeaturesPrograms() {
       title: "Functional Movement",
       description: "Build a foundation of strength with movements that enhance your daily life and athletic performance.",
       icon: Activity,
-      image: "/images/home/functional_movement.png"
+      image: "/images/home/functional_movement.png",
+      slug: "functional-movement"
     },
     {
       title: "Elite Coaching",
       description: "Train with industry-leading professionals who provide personalized guidance and unrelenting accountability.",
       icon: Dumbbell,
-      image: "/images/home/elite_coaching.png"
+      image: "/images/home/elite_coaching.png",
+      slug: "elite-coaching"
     },
     {
       title: "Nutritional Planning",
       description: "Fuel your body with customized macronutrient strategies designed to optimize recovery and results.",
       icon: Apple,
-      image: "/images/home/nutrition_planning.png"
+      image: "/images/home/nutrition_planning.png",
+      slug: "nutrition-planning"
     },
   ];
 
@@ -41,9 +45,10 @@ export default function FeaturesPrograms() {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div 
+              <Link 
+                href={`/training/${feature.slug}`}
                 key={index} 
-                className="bg-white dark:bg-black/60 border border-gray-200 dark:border-zinc-800 rounded-2xl flex flex-col group hover:-translate-y-2 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-600/10 transition-all duration-300 overflow-hidden"
+                className="bg-white dark:bg-black/60 border border-gray-200 dark:border-zinc-800 rounded-2xl flex flex-col group hover:-translate-y-2 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-600/10 transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-orange-600"
               >
                 <div className="relative w-full h-48 overflow-hidden">
                   <Image 
@@ -58,14 +63,14 @@ export default function FeaturesPrograms() {
                   <div className="p-4 bg-zinc-50 dark:bg-zinc-900 rounded-full mb-6 group-hover:scale-110 transition-transform duration-300 border border-gray-200 dark:border-zinc-800 group-hover:border-orange-500/50 shadow-lg">
                     <Icon className="w-8 h-8 text-orange-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-black dark:text-white uppercase tracking-wider mb-3 transition-colors duration-500">
+                  <h3 className="text-xl font-bold text-black dark:text-white uppercase tracking-wider mb-3 transition-colors duration-500 group-hover:text-orange-600 dark:group-hover:text-orange-500">
                     {feature.title}
                   </h3>
                   <p className="text-gray-600 dark:text-zinc-400 leading-relaxed transition-colors duration-500">
                     {feature.description}
                   </p>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
