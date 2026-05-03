@@ -11,25 +11,44 @@ export const metadata = {
 export default function TrainersPage() {
   const trainers = [
     {
-      name: "Marcus Thorne",
+      name: "Alan",
+      role: "Elite Coach",
+      specialty: "Strength & Conditioning",
+      bio: "Alan specializes in functional movement and building resilient athletes with advanced programming.",
+      profileImage: "/images/trainers/alan-profile.jpg",
+      halfImage: "/images/trainers/alan.jpg",
+    },
+    {
+      name: "Alex",
+      role: "Performance Specialist",
+      specialty: "Mobility & Hypertrophy",
+      bio: "Alex focuses on biomechanics to ensure pain-free performance and long-term muscle growth.",
+      profileImage: "/images/trainers/alex-profile.jpg",
+      halfImage: "/images/trainers/alex.jpg",
+    },
+    {
+      name: "Emmy",
+      role: "Fitness Coach",
+      specialty: "Endurance & Agility",
+      bio: "Emmy is an expert in high-intensity conditioning, helping athletes reach peak athletic agility.",
+      profileImage: "/images/trainers/emmu-profile.jpg",
+      halfImage: "/images/trainers/emmy.jpg",
+    },
+    {
+      name: "Jenee",
+      role: "Nutrition & Training",
+      specialty: "Body Recomposition",
+      bio: "Jenee integrates sustainable nutrition with intense training for lasting physique results.",
+      profileImage: "/images/trainers/jenee-profile.jpg",
+      halfImage: "/images/trainers/jenee.jpg",
+    },
+    {
+      name: "Joe",
       role: "Head Strength Coach",
-      specialty: "Powerlifting & Hypertrophy",
-      bio: "Former competitive powerlifter with over 10 years of coaching experience. Marcus specializes in helping athletes break through plateaus and build raw, functional strength.",
-      image: "/images/about/about_3.jpg",
-    },
-    {
-      name: "Sarah Jenkins",
-      role: "Functional Performance Lead",
-      specialty: "Mobility & Conditioning",
-      bio: "Sarah combines biomechanics with high-intensity conditioning. Her programs are designed to keep athletes moving pain-free while performing at their absolute peak.",
-      image: "/images/about/about_2.jpg", 
-    },
-    {
-      name: "David Chen",
-      role: "Nutrition Specialist",
-      specialty: "Body Composition & Prep",
-      bio: "A registered dietitian and competitive bodybuilder. David creates sustainable, science-based protocols that fuel performance and radically alter body composition.",
-      image: "/images/about/about_1.jpg", 
+      specialty: "Powerlifting",
+      bio: "Joe is a veteran coach who helps athletes break through persistent plateaus to hit new PRs.",
+      profileImage: "/images/trainers/joe-profile.jpg",
+      halfImage: "/images/trainers/joe.jpg",
     }
   ];
 
@@ -54,15 +73,23 @@ export default function TrainersPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {trainers.map((trainer, idx) => (
             <div key={idx} className="bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-xl group">
-              <div className="relative w-full aspect-square overflow-hidden">
+              <div className="relative w-full aspect-[4/5] overflow-hidden bg-zinc-100 dark:bg-zinc-800">
                 <Image
-                  src={trainer.image}
-                  alt={trainer.name}
+                  src={trainer.halfImage}
+                  alt={`${trainer.name} training`}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
-                <div className="absolute bottom-0 left-0 p-6 w-full">
+                <Image
+                  src={trainer.profileImage}
+                  alt={`${trainer.name} profile`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover group-hover:opacity-0 transition-opacity duration-700 absolute inset-0 z-10"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-90 z-20 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 p-6 w-full z-30 pointer-events-none">
                   <h3 className="text-2xl font-bold text-white uppercase tracking-wider mb-1">{trainer.name}</h3>
                   <p className="text-orange-500 font-semibold text-sm uppercase tracking-widest">{trainer.role}</p>
                 </div>
