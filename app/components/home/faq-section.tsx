@@ -35,12 +35,12 @@ export default function FaqSection() {
 
   return (
     <section className="w-full py-24 bg-zinc-50 dark:bg-zinc-950 transition-colors duration-500 relative overflow-hidden">
-      
+
       {/* Background Accents */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-orange-600/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-[1000px] mx-auto px-6 md:px-12 relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center p-3 bg-orange-600/10 text-orange-600 rounded-full mb-6">
@@ -58,15 +58,14 @@ export default function FaqSection() {
         <div className="flex flex-col gap-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
-            
+
             return (
-              <div 
+              <div
                 key={index}
-                className={`group border rounded-2xl transition-all duration-500 overflow-hidden ${
-                  isOpen 
-                    ? "bg-white dark:bg-zinc-900 border-orange-500 shadow-lg shadow-orange-600/5" 
+                className={`group border rounded-2xl transition-all duration-500 overflow-hidden ${isOpen
+                    ? "bg-white dark:bg-zinc-900 border-orange-500 shadow-lg shadow-orange-600/5"
                     : "bg-white/50 dark:bg-black/40 border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50"
-                }`}
+                  }`}
               >
                 <button
                   onClick={() => toggleFaq(index)}
@@ -79,8 +78,8 @@ export default function FaqSection() {
                     {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                   </div>
                 </button>
-                
-                <div 
+
+                <div
                   className={`grid transition-all duration-500 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
                 >
                   <div className="overflow-hidden">
