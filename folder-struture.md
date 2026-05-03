@@ -1,3 +1,6 @@
+# Project Structure
+
+```text
 app/
 ├── (public)/          <-- Shared Public Layout
 │   ├── layout.tsx        (Navbar, Footer, SEO wrapper)
@@ -13,17 +16,23 @@ app/
 │   │   ├── button.tsx
 │   │   ├── carousel.tsx
 │   │   └── navigation-menu.tsx
+│   ├── auth/             <-- Authentication forms
+│   │   ├── login-form.tsx
+│   │   ├── register-form.tsx
+│   │   └── forgot-password-form.tsx
 │   ├── home/             <-- Feature-specific (HeroBanner, Stats, etc.)
 │   │   └── hero-banner.tsx
 │   └── shared/           <-- Shared across layouts
 │       └── navbar.tsx
 │
-├── (auth)/               <-- Focused Auth Layout (No distractions)
-│   ├── layout.tsx        (Centered card, Logo only)
+├── (auth)/               <-- Focused Auth Layout (Split screen)
+│   ├── layout.tsx        (Split screen with branding and forms)
 │   ├── login/
 │   │   └── page.tsx      (URL: /login)
-│   └── register/
-│       └── page.tsx      (URL: /register)
+│   ├── register/
+│   │   └── page.tsx      (URL: /register)
+│   └── forgot-password/
+│       └── page.tsx      (URL: /forgot-password)
 │
 ├── (user)/          <-- Logged-in User Experience
 │   ├── layout.tsx        (Sidebar, User Nav, Notifications)
@@ -50,3 +59,4 @@ app/
 │   └── utils.ts          <-- Utility functions (cn, twMerge)
 ├── hooks/ 
 ├── components.json       <-- Shadcn UI configuration
+```
