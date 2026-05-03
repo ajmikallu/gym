@@ -1,6 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
-import { Dumbbell, MapPin, Phone, Mail } from "lucide-react";
+import { Dumbbell, MapPin, Phone, Mail, Briefcase } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -80,6 +80,12 @@ export default function Footer() {
                 <a href="mailto:info@apexfit.com" className="text-sm hover:text-white transition-colors duration-300 focus:outline-none focus:text-white">
                   info@apexfit.com
                 </a>
+              </li>
+              <li className="flex items-center gap-3 pt-2">
+                <Briefcase className="w-5 h-5 text-orange-500 shrink-0" />
+                <Link href="/careers" className="text-sm hover:text-white transition-colors duration-300 focus:outline-none focus:text-white">
+                  Careers
+                </Link>
               </li>
             </ul>
           </div>
