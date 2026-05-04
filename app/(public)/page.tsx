@@ -2,6 +2,7 @@ import HeroBanner from "@/components/home/hero-banner";
 import MissionVision from "@/components/home/mission-vision";
 import FeaturesPrograms from "@/components/home/features-programs";
 import PersonalTraining from "@/components/home/personal-training";
+import BoxingSection from "@/components/home/boxing-section";
 import FaqSection from "@/components/home/faq-section";
 
 export default function Page() {
@@ -11,6 +12,7 @@ export default function Page() {
       <MissionVision />
       <FeaturesPrograms />
       <PersonalTraining />
+      <BoxingSection />
       <FaqSection />
     </>
   );
