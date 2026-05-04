@@ -78,8 +78,7 @@ const BLOG_POSTS = [
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-black text-white pt-24 pb-20">
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24">
+    <div className="w-full">
         
         {/* Header */}
         <div className="mb-16 md:mb-24 text-center md:text-left">
@@ -173,7 +172,6 @@ export default function BlogPage() {
           ))}
         </div>
 
-      </div>
     </div>
   );
 }
