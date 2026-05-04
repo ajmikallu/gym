@@ -36,11 +36,9 @@ export default function Navbar() {
           <NavigationMenu>
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle() + " bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white focus:bg-black/5 dark:focus:bg-white/10 focus:text-black dark:focus:text-white text-sm font-semibold uppercase tracking-wider transition-colors"}>
-                    Home
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink render={<Link href="/" />} className={navigationMenuTriggerStyle() + " bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white focus:bg-black/5 dark:focus:bg-white/10 focus:text-black dark:focus:text-white text-sm font-semibold uppercase tracking-wider transition-colors"}>
+                  Home
+                </NavigationMenuLink>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
@@ -50,50 +48,40 @@ export default function Navbar() {
                 <NavigationMenuContent>
                   <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-white dark:bg-black/95 backdrop-blur-md border border-gray-200 dark:border-white/10 transition-colors">
                     <li className="row-span-3">
-                      <Link href="/about/facility" legacyBehavior passHref>
-                        <NavigationMenuLink
-                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-red-600/50 to-red-900/50 p-6 no-underline outline-none focus:shadow-md"
-                        >
-                          <Dumbbell className="h-6 w-6 text-white mb-2" />
-                          <div className="mb-2 mt-4 text-lg font-bold text-white uppercase italic">
-                            ApexFit
-                          </div>
-                          <p className="text-sm leading-tight text-white/90">
-                            Experience world-class equipment and elite coaching.
-                          </p>
-                        </NavigationMenuLink>
-                      </Link>
+                      <NavigationMenuLink render={<Link href="/about/facility" />} className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-red-600/50 to-red-900/50 p-6 no-underline outline-none focus:shadow-md">
+                        <Dumbbell className="h-6 w-6 text-white mb-2" />
+                        <div className="mb-2 mt-4 text-lg font-bold text-white uppercase italic">
+                          ApexFit
+                        </div>
+                        <p className="text-sm leading-tight text-white/90">
+                          Experience world-class equipment and elite coaching.
+                        </p>
+                      </NavigationMenuLink>
                     </li>
                     <li>
-                      <Link href="/about" legacyBehavior passHref>
-                        <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/5 dark:hover:bg-white/10 focus:bg-black/5 dark:focus:bg-white/10">
-                          <div className="text-sm font-semibold leading-none text-black dark:text-white uppercase transition-colors">Our Story</div>
-                          <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400 mt-1 transition-colors">
-                            Learn about how we started and our mission to elevate performance.
-                          </p>
-                        </NavigationMenuLink>
-                      </Link>
+                      <NavigationMenuLink render={<Link href="/about" />} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/5 dark:hover:bg-white/10 focus:bg-black/5 dark:focus:bg-white/10">
+                        <div className="text-sm font-semibold leading-none text-black dark:text-white uppercase transition-colors">Our Story</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400 mt-1 transition-colors">
+                          Learn about how we started and our mission to elevate performance.
+                        </p>
+                      </NavigationMenuLink>
                     </li>
                     <li>
-                      <Link href="/about/trainers" legacyBehavior passHref>
-                        <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/5 dark:hover:bg-white/10 focus:bg-black/5 dark:focus:bg-white/10">
-                          <div className="text-sm font-semibold leading-none text-black dark:text-white uppercase transition-colors">Trainers</div>
-                          <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400 mt-1 transition-colors">
-                            Meet our elite team of professional coaches.
-                          </p>
-                        </NavigationMenuLink>
-                      </Link>
+                      <NavigationMenuLink render={<Link href="/about/trainers" />} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/5 dark:hover:bg-white/10 focus:bg-black/5 dark:focus:bg-white/10">
+                        <div className="text-sm font-semibold leading-none text-black dark:text-white uppercase transition-colors">Trainers</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400 mt-1 transition-colors">
+                          Meet our elite team of professional coaches.
+                        </p>
+                      </NavigationMenuLink>
                     </li>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link href="/blog" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle() + " bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white focus:bg-black/5 dark:focus:bg-white/10 focus:text-black dark:focus:text-white text-sm font-semibold uppercase tracking-wider transition-colors"}>
-                    Blog
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink render={<Link href="/blog" />} className={navigationMenuTriggerStyle() + " bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white focus:bg-black/5 dark:focus:bg-white/10 focus:text-black dark:focus:text-white text-sm font-semibold uppercase tracking-wider transition-colors"}>
+                  Blog
+                </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
