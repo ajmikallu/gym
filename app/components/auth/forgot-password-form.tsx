@@ -4,6 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, ArrowRight, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { resetPassword } from "@/app/(auth)/actions";
+import { Input } from "@/app/components/ui/input";
+import { Button } from "@/app/components/ui/button";
 
 export function ForgotPasswordForm() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -79,7 +81,7 @@ export function ForgotPasswordForm() {
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-3 h-5 w-5 text-zinc-400" />
-              <input
+              <Input
                 id="email"
                 name="email"
                 type="email"
@@ -92,7 +94,7 @@ export function ForgotPasswordForm() {
           </div>
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={isLoading}
           className="inline-flex w-full items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 disabled:pointer-events-none disabled:opacity-50 bg-orange-600 text-white hover:bg-orange-700 h-11 px-8 py-2 shadow-sm"
@@ -104,7 +106,7 @@ export function ForgotPasswordForm() {
               Send Reset Link <ArrowRight className="ml-2 h-4 w-4" />
             </>
           )}
-        </button>
+        </Button>
       </form>
 
       {/* Footer */}
