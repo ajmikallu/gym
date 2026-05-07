@@ -4,6 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { Menu, X, Dumbbell } from "lucide-react";
 import { ThemeToggle } from "@/app/components/shared/theme-toggle";
+import type { User } from '@supabase/supabase-js';
+import { logout } from '@/app/(auth)/actions';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,7 +16,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-export default function Navbar() {
+export default function Navbar({ user }: { user: User | null } = { user: null }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const closeMenu = () => setIsOpen(false);
@@ -90,12 +92,27 @@ export default function Navbar() {
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
-          <Link href="/login" className="text-sm font-semibold text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors uppercase tracking-wider">
-            Login
-          </Link>
-          <Link href="/register" className="px-6 py-2.5 text-sm font-bold text-white bg-red-600 hover:bg-red-700 transition-all rounded-sm uppercase tracking-wider">
-            Join Now
-          </Link>
+          {user ? (
+            <>
+              <Link href="/dashboard" className="text-sm font-semibold text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors uppercase tracking-wider">
+                Dashboard
+              </Link>
+              <form action={logout}>
+                <button type="submit" className="px-6 py-2.5 text-sm font-bold text-white bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:text-black dark:hover:bg-zinc-200 transition-all rounded-sm uppercase tracking-wider">
+                  Logout
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm font-semibold text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors uppercase tracking-wider">
+                Login
+              </Link>
+              <Link href="/register" className="px-6 py-2.5 text-sm font-bold text-white bg-red-600 hover:bg-red-700 transition-all rounded-sm uppercase tracking-wider">
+                Join Now
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -130,12 +147,27 @@ export default function Navbar() {
             Blog
           </Link>
           <hr className="border-gray-200 dark:border-white/10 my-2 transition-colors duration-500" />
-          <Link href="/login" className="text-lg font-semibold text-black dark:text-white transition-colors uppercase" onClick={closeMenu}>
-            Login
-          </Link>
-          <Link href="/register" className="px-6 py-3 text-center text-base font-bold text-white bg-red-600 rounded-sm uppercase tracking-wider mt-2" onClick={closeMenu}>
-            Join Now
-          </Link>
+          {user ? (
+            <>
+              <Link href="/dashboard" className="text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors uppercase" onClick={closeMenu}>
+                Dashboard
+              </Link>
+              <form action={logout}>
+                <button type="submit" className="w-full text-left px-6 py-3 text-base font-bold text-white bg-zinc-900 dark:bg-white dark:text-black rounded-sm uppercase tracking-wider mt-2 transition-colors" onClick={closeMenu}>
+                  Logout
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="text-lg font-semibold text-black dark:text-white transition-colors uppercase" onClick={closeMenu}>
+                Login
+              </Link>
+              <Link href="/register" className="px-6 py-3 text-center text-base font-bold text-white bg-red-600 rounded-sm uppercase tracking-wider mt-2" onClick={closeMenu}>
+                Join Now
+              </Link>
+            </>
+          )}
         </div>
       )}
     </header>
