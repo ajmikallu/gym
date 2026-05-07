@@ -2,18 +2,25 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { User, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
+import { User, Mail, Lock, ArrowRight, Loader2, AlertCircle } from "lucide-react";
+import { register } from "@/app/(auth)/actions";
 
 export function RegisterForm() {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+    setError(null);
+    
+    const formData = new FormData(e.currentTarget);
+    const result = await register(formData);
+
+    if (result?.error) {
+      setError(result.error);
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -28,6 +35,13 @@ export function RegisterForm() {
         </p>
       </div>
 
+      {error && (
+        <div className="p-3 text-sm rounded-md bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20 flex items-center space-x-2">
+          <AlertCircle className="w-4 h-4" />
+          <span>{error}</span>
+        </div>
+      )}
+
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-6">
         <div className="space-y-4">
@@ -39,6 +53,7 @@ export function RegisterForm() {
               <User className="absolute left-3 top-3 h-5 w-5 text-zinc-400" />
               <input
                 id="name"
+                name="name"
                 type="text"
                 placeholder="John Doe"
                 required
@@ -56,6 +71,7 @@ export function RegisterForm() {
               <Mail className="absolute left-3 top-3 h-5 w-5 text-zinc-400" />
               <input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="you@example.com"
                 required
@@ -73,6 +89,7 @@ export function RegisterForm() {
               <Lock className="absolute left-3 top-3 h-5 w-5 text-zinc-400" />
               <input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="••••••••"
                 required
@@ -87,6 +104,7 @@ export function RegisterForm() {
           <input
             type="checkbox"
             id="terms"
+            name="terms"
             required
             className="h-4 w-4 rounded border-zinc-300 text-orange-600 focus:ring-orange-600 dark:border-zinc-700 dark:bg-zinc-950 dark:ring-offset-zinc-950"
           />
