@@ -29,21 +29,6 @@ const items = [
     icon: Home,
   },
   {
-    title: "Workouts",
-    url: "/user/workouts",
-    icon: Dumbbell,
-  },
-  {
-    title: "Schedule",
-    url: "/user/schedule",
-    icon: Calendar,
-  },
-  {
-    title: "Inbox",
-    url: "/user/inbox",
-    icon: Inbox,
-  },
-  {
     title: "Settings",
     url: "/settings",
     icon: Settings,
