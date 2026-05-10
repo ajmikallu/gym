@@ -11,6 +11,9 @@ CREATE TABLE profiles (
   
   -- Allergies as an array of text
   allergies TEXT[] DEFAULT '{}',
+
+  -- User Role for Authorization
+  role VARCHAR(20) DEFAULT 'USER',
   
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
