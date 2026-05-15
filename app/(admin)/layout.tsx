@@ -12,15 +12,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/login");
   }
 
-  // Authorization Check
+  // Authorization Check using Database Column
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .single();
 
-  if (!profile || profile.role !== "ADMIN") {
-    // Redirect normal users back to their dashboard
+  const allowedRoles = ["ADMIN", "SUPERADMIN", "TRAINER", "BLOGGER"];
+  if (!profile || !allowedRoles.includes(profile.role?.toUpperCase())) {
+    // Redirect normal customers back to their dashboard
     redirect("/dashboard");
   }
 
