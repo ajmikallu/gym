@@ -5,6 +5,8 @@ DO $$
 DECLARE
     -- Fixed UUID for Idempotency
     superadmin_id UUID := '550e8400-e29b-41d4-a716-446655440000';
+    -- Secure runtime password generation
+    generated_password text := encode(gen_random_bytes(16), 'base64');
 BEGIN
     -- Ensure pgcrypto extension is active for secure password hashing
     CREATE EXTENSION IF NOT EXISTS pgcrypto;
@@ -30,7 +32,7 @@ BEGIN
             'authenticated',
             'superadmin@gym.com',
             -- Password Hashing via pgcrypto compatible with Supabase Auth
-            crypt('SuperPassword123!', gen_salt('bf')),
+            crypt(generated_password, gen_salt('bf')),
             now(),
             -- Metadata Config
             '{"provider":"email","providers":["email"]}'::jsonb,
@@ -49,6 +51,11 @@ BEGIN
         WHERE user_id = superadmin_id;
         
         RAISE NOTICE 'Root Superadmin initialized successfully.';
+        RAISE NOTICE '-----------------------------------------';
+        RAISE NOTICE 'EMAIL: superadmin@gym.com';
+        RAISE NOTICE 'PASSWORD: %', generated_password;
+        RAISE NOTICE 'PLEASE SAVE THIS PASSWORD SECURELY.';
+        RAISE NOTICE '-----------------------------------------';
     ELSE
         RAISE NOTICE 'Root Superadmin already exists. Skipping initialization.';
     END IF;
