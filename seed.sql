@@ -44,11 +44,12 @@ BEGIN
         -- 2. Trigger Override (Promotion)
         -- At this exact moment, your `on_auth_user_created` trigger has already fired 
         -- and created a row in `public.user_roles` with the default role 'customer'.
-        -- We now execute a targeted UPDATE to forcefully promote this specific UUID.
+        -- We use an UPSERT to forcefully promote this specific UUID, ensuring 
+        -- they get 'superadmin' even if the trigger silently failed.
         
-        UPDATE public.user_roles 
-        SET role = 'superadmin' 
-        WHERE user_id = superadmin_id;
+        INSERT INTO public.user_roles (user_id, role) 
+        VALUES (superadmin_id, 'superadmin')
+        ON CONFLICT (user_id) DO UPDATE SET role = 'superadmin';
         
         RAISE NOTICE 'Root Superadmin initialized successfully.';
         RAISE NOTICE '-----------------------------------------';
