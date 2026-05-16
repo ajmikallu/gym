@@ -375,42 +375,33 @@ CREATE TRIGGER audit_slots_changes
 -- ==========================================
 CREATE OR REPLACE FUNCTION public.check_slot_capacity()
 RETURNS trigger AS $$
+DECLARE
+  v_old_occupies boolean := false;
+  v_new_occupies boolean := false;
 BEGIN
-  IF (TG_OP = 'INSERT') THEN
-    IF NEW.status != 'CANCELLED' THEN
-      UPDATE public.slots 
-      SET current_bookings = current_bookings + 1 
-      WHERE id = NEW.slot_id AND current_bookings < max_capacity;
+  -- Determine if the old row occupied a slot
+  IF TG_OP IN ('UPDATE', 'DELETE') THEN
+    v_old_occupies := (OLD.status != 'CANCELLED');
+  END IF;
 
-      IF NOT FOUND THEN
-        RAISE EXCEPTION 'Slot % is already fully booked', NEW.slot_id;
-      END IF;
-    END IF;
-  ELSIF (TG_OP = 'UPDATE') THEN
-    -- If status changed to CANCELLED
-    IF OLD.status != 'CANCELLED' AND NEW.status = 'CANCELLED' THEN
-      UPDATE public.slots SET current_bookings = current_bookings - 1 WHERE id = OLD.slot_id AND current_bookings > 0;
-    -- If status changed from CANCELLED to CONFIRMED
-    ELSIF OLD.status = 'CANCELLED' AND NEW.status != 'CANCELLED' THEN
-      UPDATE public.slots SET current_bookings = current_bookings + 1 WHERE id = NEW.slot_id AND current_bookings < max_capacity;
-      IF NOT FOUND THEN
-        RAISE EXCEPTION 'Slot % is already fully booked', NEW.slot_id;
-      END IF;
-    -- If slot changed entirely (migration)
-    ELSIF OLD.slot_id != NEW.slot_id AND NEW.status != 'CANCELLED' THEN
-      UPDATE public.slots SET current_bookings = current_bookings - 1 WHERE id = OLD.slot_id AND current_bookings > 0;
-      UPDATE public.slots SET current_bookings = current_bookings + 1 WHERE id = NEW.slot_id AND current_bookings < max_capacity;
-      IF NOT FOUND THEN
-        RAISE EXCEPTION 'Slot % is already fully booked', NEW.slot_id;
-      END IF;
-    END IF;
-  ELSIF (TG_OP = 'DELETE') THEN
-    IF OLD.status != 'CANCELLED' THEN
-      UPDATE public.slots 
-      SET current_bookings = current_bookings - 1 
-      WHERE id = OLD.slot_id AND current_bookings > 0;
+  -- Determine if the new row occupies a slot
+  IF TG_OP IN ('INSERT', 'UPDATE') THEN
+    v_new_occupies := (NEW.status != 'CANCELLED');
+  END IF;
+
+  -- Decrement old slot if it was occupied and is being freed, migrated, or deleted
+  IF v_old_occupies AND (TG_OP = 'DELETE' OR (TG_OP = 'UPDATE' AND (NOT v_new_occupies OR OLD.slot_id != NEW.slot_id))) THEN
+    UPDATE public.slots SET current_bookings = current_bookings - 1 WHERE id = OLD.slot_id AND current_bookings > 0;
+  END IF;
+
+  -- Increment new slot if it is occupying a slot and is newly inserted, recovered, or migrated
+  IF v_new_occupies AND (TG_OP = 'INSERT' OR (TG_OP = 'UPDATE' AND (NOT v_old_occupies OR OLD.slot_id != NEW.slot_id))) THEN
+    UPDATE public.slots SET current_bookings = current_bookings + 1 WHERE id = NEW.slot_id AND current_bookings < max_capacity;
+    IF NOT FOUND THEN
+      RAISE EXCEPTION 'Slot % is already fully booked', NEW.slot_id;
     END IF;
   END IF;
+
   IF (TG_OP = 'DELETE') THEN
     RETURN OLD;
   END IF;
