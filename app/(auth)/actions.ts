@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/app/lib/supabase/server'
 import { log } from 'console'
+import { jwtDecode } from 'jwt-decode'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -23,7 +24,7 @@ export async function login(formData: FormData) {
 
   if (authData.session) {
     try {
-      const payload = JSON.parse(Buffer.from(authData.session.access_token.split('.')[1], 'base64').toString())
+      const payload = jwtDecode(authData.session.access_token) as any
       console.log('payload', payload);
 
       // Custom claims can be placed at the root or inside app_metadata depending on Supabase version
@@ -67,7 +68,7 @@ export async function register(formData: FormData) {
   if (authData.session) {
     let isAdmin = false
     try {
-      const payload = JSON.parse(Buffer.from(authData.session.access_token.split('.')[1], 'base64').toString())
+      const payload = jwtDecode(authData.session.access_token) as any
       const role = payload.user_role || payload.app_metadata?.user_role
 
       const allowedRoles = ['ADMIN', 'SUPERADMIN', 'TRAINER', 'BLOGGER']

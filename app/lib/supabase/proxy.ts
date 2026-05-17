@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { jwtDecode } from 'jwt-decode'
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -37,7 +38,7 @@ export async function updateSession(request: NextRequest) {
   let role = 'customer'
   if (session?.access_token) {
     try {
-      const payload = JSON.parse(atob(session.access_token.split('.')[1]))
+      const payload = jwtDecode(session.access_token) as any
       role = payload.user_role || payload.app_metadata?.user_role || 'customer'
     } catch (e) {
       // ignore

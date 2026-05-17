@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
 import { SidebarProvider, SidebarTrigger } from "@/app/components/ui/sidebar";
 import { AdminSidebar } from "@/app/components/admin/admin-sidebar";
+import { jwtDecode } from "jwt-decode";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -18,7 +19,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   let role = null;
   if (session?.access_token) {
     try {
-      const payload = JSON.parse(Buffer.from(session.access_token.split('.')[1], 'base64').toString());
+      const payload = jwtDecode(session.access_token) as any;
       role = payload.user_role || payload.app_metadata?.user_role;
     } catch (e) {
       // Ignore token parse error
