@@ -12,15 +12,21 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/login");
   }
 
-  // Authorization Check using Database Column
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
+  // Authorization Check using Custom Claims in JWT
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  let role = null;
+  if (session?.access_token) {
+    try {
+      const payload = JSON.parse(Buffer.from(session.access_token.split('.')[1], 'base64').toString());
+      role = payload.user_role || payload.app_metadata?.user_role;
+    } catch (e) {
+      // Ignore token parse error
+    }
+  }
 
   const allowedRoles = ["ADMIN", "SUPERADMIN", "TRAINER", "BLOGGER"];
-  if (!profile || !allowedRoles.includes(profile.role?.toUpperCase())) {
+  if (!role || typeof role !== 'string' || !allowedRoles.includes(role.toUpperCase())) {
     // Redirect normal customers back to their dashboard
     redirect("/dashboard");
   }

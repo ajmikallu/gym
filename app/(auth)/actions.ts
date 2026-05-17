@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/app/lib/supabase/server'
+import { log } from 'console'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -12,14 +13,34 @@ export async function login(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
-
+  const { data: authData, error } = await supabase.auth.signInWithPassword(data)
+  console.log(authData)
   if (error) {
     return { error: error.message }
   }
 
+  let redirectTo = '/dashboard'
+
+  if (authData.session) {
+    try {
+      const payload = JSON.parse(Buffer.from(authData.session.access_token.split('.')[1], 'base64').toString())
+      console.log('payload', payload);
+
+      // Custom claims can be placed at the root or inside app_metadata depending on Supabase version
+      const role = payload.user_role || payload.app_metadata?.user_role
+      console.log('Extracted role:', role)
+
+      const allowedRoles = ['ADMIN', 'SUPERADMIN', 'TRAINER', 'BLOGGER']
+      if (role && typeof role === 'string' && allowedRoles.includes(role.toUpperCase())) {
+        redirectTo = '/admin'
+      }
+    } catch (e) {
+      console.error('Error parsing token:', e)
+    }
+  }
+
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  redirect(redirectTo)
 }
 
 export async function register(formData: FormData) {
@@ -35,13 +56,35 @@ export async function register(formData: FormData) {
     },
   }
 
-  const { error } = await supabase.auth.signUp(data)
+  const { data: authData, error } = await supabase.auth.signUp(data)
 
   if (error) {
     return { error: error.message }
   }
 
   revalidatePath('/', 'layout')
+
+  if (authData.session) {
+    let isAdmin = false
+    try {
+      const payload = JSON.parse(Buffer.from(authData.session.access_token.split('.')[1], 'base64').toString())
+      const role = payload.user_role || payload.app_metadata?.user_role
+
+      const allowedRoles = ['ADMIN', 'SUPERADMIN', 'TRAINER', 'BLOGGER']
+      if (role && typeof role === 'string' && allowedRoles.includes(role.toUpperCase())) {
+        isAdmin = true
+      }
+    } catch (e) {
+      console.error('Error parsing token in register:', e)
+    }
+
+    if (isAdmin) {
+      redirect('/admin')
+    } else {
+      redirect('/dashboard')
+    }
+  }
+
   // We redirect to login to ask the user to verify their email (or they just log in if verify isn't required)
   redirect('/login?message=Check your email to continue sign in process')
 }

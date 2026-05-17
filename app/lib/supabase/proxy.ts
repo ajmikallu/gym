@@ -31,7 +31,44 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let role = 'customer'
+  if (session?.access_token) {
+    try {
+      const payload = JSON.parse(atob(session.access_token.split('.')[1]))
+      role = payload.user_role || payload.app_metadata?.user_role || 'customer'
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  const url = request.nextUrl.clone()
+
+  // Protect /admin routes
+  if (url.pathname.startsWith('/admin')) {
+    if (!user) {
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    const allowedAdminRoles = ['superadmin', 'admin', 'trainer', 'blogger']
+    if (!allowedAdminRoles.includes(role.toLowerCase())) {
+      url.pathname = '/dashboard' // Send unauthorized users back to dashboard
+      return NextResponse.redirect(url)
+    }
+  }
+
+  // Protect /dashboard routes
+  if (url.pathname.startsWith('/dashboard')) {
+    if (!user) {
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+    // Anyone who is logged in (Customer, Admin, Trainer, etc.) can access /dashboard.
+    // No role checks needed here.
+  }
 
   return supabaseResponse
 }

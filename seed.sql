@@ -1,51 +1,89 @@
 -- Advanced Supabase Seed Script
--- Initializes a Root Superadmin account bypassing normal signup flows
+-- Initializes a Root Superadmin account bypassing normal signup flows safely
+-- Hardcoded Password: Password123@
 
 DO $$
 DECLARE
     -- Fixed UUID for Idempotency
     superadmin_id UUID := '550e8400-e29b-41d4-a716-446655440000';
-    -- Secure runtime password generation
-    generated_password text := encode(gen_random_bytes(16), 'base64');
+    -- Static password string
+    static_password text := 'Password123@';
+    -- Standard Bcrypt hash compatible with GoTrue
+    hashed_password text;
 BEGIN
-    -- Ensure pgcrypto extension is active for secure password hashing
+    -- Ensure pgcrypto extension is active
     CREATE EXTENSION IF NOT EXISTS pgcrypto;
+    
+    -- Generate GoTrue-compatible blowfish/bcrypt hash
+    hashed_password := crypt(static_password, gen_salt('bf', 10));
 
     -- Idempotency Check: Only run if the user doesn't already exist
     IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id = superadmin_id) THEN
         
-        -- 1. Auth Injection
+        -- 1. Auth User Injection
         INSERT INTO auth.users (
             id,
+            instance_id,
             aud,
             role,
             email,
             encrypted_password,
             email_confirmed_at,
+            recovery_sent_at,
+            last_sign_in_at,
             raw_app_meta_data,
             raw_user_meta_data,
             created_at,
-            updated_at
+            updated_at,
+            confirmation_token,
+            email_change,
+            email_change_token_new,
+            recovery_token,
+            is_super_admin,
+            phone,
+            phone_confirmed_at,
+            phone_change,
+            phone_change_token,
+            email_change_token_current,
+            is_sso_user,
+            deleted_at
         ) VALUES (
             superadmin_id,
+            '00000000-0000-0000-0000-000000000000', -- Default local/cloud instance ID
             'authenticated',
             'authenticated',
             'superadmin@gym.com',
-            -- Password Hashing via pgcrypto compatible with Supabase Auth
-            crypt(generated_password, gen_salt('bf')),
-            now(),
-            -- Metadata Config
+            hashed_password,
+            now(), -- Confirmed immediately
+            null, null,
             '{"provider":"email","providers":["email"]}'::jsonb,
             '{"full_name":"Root Superadmin"}'::jsonb,
-            now(),
-            now()
+            now(), now(),
+            '', '', '', '', false, null, null, '', '', '', false, null
+        );
+
+        -- 2. Auth Identity Injection (CRITICAL FOR LOGINS)
+        INSERT INTO auth.identities (
+            id,
+            provider_id,
+            user_id,
+            identity_data,
+            provider,
+            last_sign_in_at,
+            created_at,
+            updated_at
+        ) VALUES (
+            gen_random_uuid(),
+            superadmin_id::text, -- For email provider, provider_id is typically the user_id
+            superadmin_id,
+            json_build_object('sub', superadmin_id, 'email', 'superadmin@gym.com')::jsonb,
+            'email',
+            now(), now(), now()
         );
         
-        -- 2. Trigger Override (Promotion)
-        -- At this exact moment, your `on_auth_user_created` trigger has already fired 
-        -- and created a row in `public.user_roles` with the default role 'customer'.
-        -- We use an UPSERT to forcefully promote this specific UUID, ensuring 
-        -- they get 'superadmin' even if the trigger silently failed.
+        -- 3. Trigger Override (Promotion)
+        -- We perform a small sleep to ensure any asynchronous public triggers have finished executing
+        PERFORM pg_sleep(0.1); 
         
         INSERT INTO public.user_roles (user_id, role) 
         VALUES (superadmin_id, 'superadmin')
@@ -54,8 +92,7 @@ BEGIN
         RAISE NOTICE 'Root Superadmin initialized successfully.';
         RAISE NOTICE '-----------------------------------------';
         RAISE NOTICE 'EMAIL: superadmin@gym.com';
-        RAISE NOTICE 'PASSWORD: %', generated_password;
-        RAISE NOTICE 'PLEASE SAVE THIS PASSWORD SECURELY.';
+        RAISE NOTICE 'PASSWORD: Password123@';
         RAISE NOTICE '-----------------------------------------';
     ELSE
         RAISE NOTICE 'Root Superadmin already exists. Skipping initialization.';
