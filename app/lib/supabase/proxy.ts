@@ -47,17 +47,25 @@ export async function updateSession(request: NextRequest) {
 
   const url = request.nextUrl.clone()
 
+  const redirectWithCookies = (redirectUrl: URL) => {
+    const redirectResponse = NextResponse.redirect(redirectUrl)
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    return redirectResponse
+  }
+
   // Protect /admin routes
   if (url.pathname.startsWith('/admin')) {
     if (!user) {
       url.pathname = '/login'
-      return NextResponse.redirect(url)
+      return redirectWithCookies(url)
     }
 
     const allowedAdminRoles = ['superadmin', 'admin', 'trainer', 'blogger']
     if (!allowedAdminRoles.includes(role.toLowerCase())) {
       url.pathname = '/dashboard' // Send unauthorized users back to dashboard
-      return NextResponse.redirect(url)
+      return redirectWithCookies(url)
     }
   }
 
@@ -65,7 +73,7 @@ export async function updateSession(request: NextRequest) {
   if (url.pathname.startsWith('/dashboard')) {
     if (!user) {
       url.pathname = '/login'
-      return NextResponse.redirect(url)
+      return redirectWithCookies(url)
     }
     // Anyone who is logged in (Customer, Admin, Trainer, etc.) can access /dashboard.
     // No role checks needed here.
