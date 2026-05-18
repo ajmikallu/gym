@@ -1,6 +1,6 @@
 # Guide: Managing Roles and Permissions (RBAC)
 
-This document explains how to add new roles or permissions to your Supabase RBAC system. The system relies on PostgreSQL ENUMs and custom tables, meaning any changes to the available roles or permissions require structural database updates.
+This document explains how to add new roles or permissions to your Supabase RBAC system. The system relies on PostgreSQL ENUMs and a Metadata-Only architecture, meaning roles are securely managed directly via Supabase Auth `app_metadata` and NOT through redundant database tables.
 
 ## 1. Adding a New Role
 
@@ -42,16 +42,16 @@ INSERT INTO public.role_permissions (role, permission) VALUES
 
 ## 4. Assigning a Role to a User
 
-When you want to grant a user a specific role, you insert or update a record in the `user_roles` table. 
+When you want to grant a user a specific role programmatically, you must update their `app_metadata` via the Supabase Admin API. We no longer use a `user_roles` database table.
 
-**SQL Command:**
-```sql
--- Replace the UUID with the actual user's Auth ID
-INSERT INTO public.user_roles (user_id, role) 
-VALUES ('123e4567-e89b-12d3-a456-426614174000', 'manager')
-ON CONFLICT (user_id, role) DO NOTHING;
+**TypeScript Command:**
+```typescript
+const { data, error } = await supabase.auth.admin.updateUserById(
+  '123e4567-e89b-12d3-a456-426614174000',
+  { app_metadata: { assigned_role: 'manager' } }
+)
 ```
-*Because of our Auth Hook (`custom_access_token_hook`), the next time this user logs in or refreshes their session, their JWT will automatically contain `"user_role": "manager"`.*
+*Because the role is stored in `app_metadata`, the next time this user logs in or refreshes their session, their JWT payload will automatically contain the `app_metadata.assigned_role` property natively, and Row Level Security will enforce it instantly.*
 
 ## 5. Using the Permission in Row Level Security (RLS)
 
@@ -90,7 +90,7 @@ When designing roles and policies, keep these critical patterns in mind:
 Always use `EXISTS` instead of `COUNT(*)` when checking permissions in your `authorize()` function. `EXISTS` short-circuits and stops searching as soon as it finds a match, which is significantly faster for database queries running inside RLS.
 
 ### Handling Null Claims
-Ensure your auth hook safely defaults missing roles (e.g., to `"customer"`) and your `authorize` function gracefully handles the string `'null'` using `NULLIF(..., 'null')` to avoid casting errors when no role is found.
+Ensure your `authorize` function gracefully handles the string `'null'` using `NULLIF(..., 'null')` to avoid casting errors when no role is found in the `app_metadata`.
 
 ### Scoped RLS Policies (Contextual Permissions)
 A user might have a generic permission like `bookings.read`, but that doesn't always mean they should read *all* bookings across the system. For example, a `trainer` should only see bookings for their assigned slots. 

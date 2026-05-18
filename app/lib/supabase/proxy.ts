@@ -39,7 +39,7 @@ export async function updateSession(request: NextRequest) {
   if (session?.access_token) {
     try {
       const payload = jwtDecode(session.access_token) as any
-      role = payload.user_role || payload.app_metadata?.user_role || 'customer'
+      role = payload.app_metadata?.assigned_role || 'customer'
     } catch (e) {
       // ignore
     }
@@ -61,7 +61,7 @@ export async function updateSession(request: NextRequest) {
       url.pathname = '/login'
       return redirectWithCookies(url)
     }
-
+    console.log("Role: ", role)
     const allowedAdminRoles = ['superadmin', 'admin', 'trainer', 'blogger']
     if (!allowedAdminRoles.includes(role.toLowerCase())) {
       url.pathname = '/dashboard' // Send unauthorized users back to dashboard
