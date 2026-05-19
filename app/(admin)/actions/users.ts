@@ -4,6 +4,9 @@ import { createAdminClient } from '@/app/lib/supabase/admin'
 import { createClient } from '@/app/lib/supabase/server'
 import { jwtDecode } from 'jwt-decode'
 
+// Allowed roles for server-side validation
+const ALLOWED_ROLES = ['admin', 'editor', 'user'];
+
 export async function createUser(prevState: any, formData: FormData) {
   try {
     const supabase = await createClient()
@@ -12,12 +15,30 @@ export async function createUser(prevState: any, formData: FormData) {
     if (!session) throw new Error("Unauthorized access request.")
 
     const payload = jwtDecode(session.access_token) as any
-    const callerRole = payload.user_role || payload.app_metadata?.assigned_role || 'customer'
+    const callerRole = payload.app_metadata?.assigned_role || 'customer'
 
-    const targetRole = formData.get('role') as string
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const fullName = formData.get('fullName') as string
+    const targetRole = (formData.get('role') as string || '').trim()
+    const email = (formData.get('email') as string || '').trim()
+    const password = formData.get('password') as string || ''
+    const fullName = (formData.get('fullName') as string || '').trim()
+
+    // Server-side validation and sanitization
+    if (!ALLOWED_ROLES.includes(targetRole)) {
+      throw new Error("Invalid role specified.")
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email || !emailRegex.test(email)) {
+      throw new Error("A valid email address is required.")
+    }
+
+    if (!password || password.length < 6) {
+      throw new Error("Password must be at least 6 characters long.")
+    }
+
+    if (!fullName) {
+      throw new Error("Full name is required.")
+    }
 
     // 1. Data-Driven Hierarchy Guard Check
     const { data: isAllowed, error: rpcError } = await supabase.rpc('can_create_role', {

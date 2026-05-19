@@ -1,6 +1,7 @@
 "use client"
 
 import { useActionState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { createUser } from "@/app/(admin)/actions/users"
 import { Button } from "@/app/components/ui/button"
 import { Input } from "@/app/components/ui/input"
@@ -13,7 +14,15 @@ const initialState = {
 }
 
 export function AddUserForm() {
+  const router = useRouter()
   const [state, formAction, isPending] = useActionState(createUser, initialState)
+
+  // Trigger a client-side data refresh when creation succeeds
+  useEffect(() => {
+    if (state?.success) {
+      router.refresh()
+    }
+  }, [state?.success, router])
 
   return (
     <Card className="w-full">
@@ -33,27 +42,27 @@ export function AddUserForm() {
               User created successfully! ID: {state.userId}
             </div>
           )}
-          
+
           <div className="space-y-2">
             <label className="text-sm font-medium" htmlFor="fullName">Full Name</label>
             <Input id="fullName" name="fullName" required placeholder="John Doe" />
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-sm font-medium" htmlFor="email">Email</label>
             <Input id="email" name="email" type="email" required placeholder="john@example.com" />
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-sm font-medium" htmlFor="password">Password</label>
             <Input id="password" name="password" type="password" required placeholder="••••••••" />
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-sm font-medium" htmlFor="role">Role</label>
-            <select 
-              id="role" 
-              name="role" 
+            <select
+              id="role"
+              name="role"
               required
               className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
