@@ -53,6 +53,23 @@ const { data, error } = await supabase.auth.admin.updateUserById(
 ```
 *Because the role is stored in `app_metadata`, the next time this user logs in or refreshes their session, their JWT payload will automatically contain the `app_metadata.assigned_role` property natively, and Row Level Security will enforce it instantly.*
 
+### Server-Side Authorization: Accessing Roles Safely
+
+When validating a user's role server-side (for example, inside a Next.js Server Action or API Route), **never decode the raw access token using client-side libraries like `jwt-decode`**. Decoding the JWT client-side is unverified and susceptible to client-side manipulation if not validated cryptographically by the server.
+
+Instead, always retrieve the authenticated session using your server-side Supabase client (`supabase.auth.getSession()`), and read the role directly from the pre-verified `session.user` object:
+
+```typescript
+const supabase = await createClient()
+const { data: { session } } = await supabase.auth.getSession()
+
+if (!session) throw new Error("Unauthorized")
+
+// Safe, pre-verified server-side role retrieval
+const callerRole = session.user?.app_metadata?.assigned_role || session.user?.role || 'customer'
+```
+This ensures authorization decisions are completely secure, relying exclusively on trusted, cryptographically validated server-side session payloads.
+
 ## 5. Using the Permission in Row Level Security (RLS)
 
 Now that everything is set up, you can use the `authorize()` function in your RLS policies to restrict database operations. 

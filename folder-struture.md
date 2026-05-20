@@ -48,6 +48,7 @@ app/
 │
 ├── (auth)/                <-- Focused Auth Layout (Split screen)
 │   ├── layout.tsx         (Split screen with branding and forms)
+│   ├── actions.ts         (Server actions for authentication)
 │   ├── login/
 │   │   └── page.tsx       (URL: /login)
 │   ├── register/
@@ -67,6 +68,8 @@ app/
 │
 ├── (admin)/               <-- High-Privilege Internal Tools
 │   ├── layout.tsx         (Admin Sidebar, Data Overviews)
+│   ├── actions/
+│   │   └── users.ts       (Server actions for user management)
 │   └── admin/              
 │       ├── page.tsx       (URL: /admin)
 │       ├── exercises/              
