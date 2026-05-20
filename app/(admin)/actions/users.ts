@@ -2,7 +2,7 @@
 
 import { createAdminClient } from '@/app/lib/supabase/admin'
 import { createClient } from '@/app/lib/supabase/server'
-import { jwtDecode } from 'jwt-decode'
+
 
 // Allowed roles for server-side validation
 const ALLOWED_ROLES = ['admin', 'trainer', 'customer'];
@@ -14,8 +14,7 @@ export async function createUser(prevState: any, formData: FormData) {
 
     if (!session) throw new Error("Unauthorized access request.")
 
-    const payload = jwtDecode(session.access_token) as any
-    const callerRole = payload.app_metadata?.assigned_role || 'customer'
+    const callerRole = session.user?.app_metadata?.assigned_role || session.user?.role || 'customer'
 
     const targetRole = (formData.get('role') as string || '').trim()
     const email = (formData.get('email') as string || '').trim()
@@ -61,10 +60,10 @@ export async function createUser(prevState: any, formData: FormData) {
     })
 
     if (authError) throw new Error(authError.message)
-
-    return { success: true, userId: authUser.user.id }
-
+ 
+    return { success: true, userId: authUser.user.id, error: "" }
+ 
   } catch (error: any) {
-    return { success: false, error: error.message || "An unexpected error occurred." }
+    return { success: false, userId: "", error: error.message || "An unexpected error occurred." }
   }
 }
