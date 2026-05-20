@@ -5,7 +5,7 @@ import { createClient } from '@/app/lib/supabase/server'
 import { jwtDecode } from 'jwt-decode'
 
 // Allowed roles for server-side validation
-const ALLOWED_ROLES = ['admin', 'editor', 'user'];
+const ALLOWED_ROLES = ['admin', 'trainer', 'customer'];
 
 export async function createUser(prevState: any, formData: FormData) {
   try {
