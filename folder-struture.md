@@ -64,7 +64,9 @@ app/
 │   │   └── page.tsx       (URL: /settings)
 │   └── user/
 │       └── [slug]/              
-│           └── page.tsx   (URL: /user/slug) 
+│           ├── page.tsx       (URL: /user/slug) 
+│           ├── actions.ts     (Server actions for profile update/reset)
+│           └── profile-editor.tsx (Premium client CRUD profile manager)
 │
 ├── (admin)/               <-- High-Privilege Internal Tools
 │   ├── layout.tsx         (Admin Sidebar, Data Overviews)
