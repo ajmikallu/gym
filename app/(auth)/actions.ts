@@ -27,8 +27,8 @@ export async function login(formData: FormData) {
       const payload = jwtDecode(authData.session.access_token) as any
       console.log('payload', payload);
 
-      // Custom claims can be placed at the root or inside app_metadata depending on Supabase version
-      const role = payload.user_role || payload.app_metadata?.user_role
+      // Roles are natively stored in app_metadata.assigned_role in the new architecture
+      const role = payload.app_metadata?.assigned_role || 'customer'
       console.log('Extracted role:', role)
 
       const allowedRoles = ['ADMIN', 'SUPERADMIN', 'TRAINER', 'BLOGGER']
@@ -69,7 +69,7 @@ export async function register(formData: FormData) {
     let isAdmin = false
     try {
       const payload = jwtDecode(authData.session.access_token) as any
-      const role = payload.user_role || payload.app_metadata?.user_role
+      const role = payload.app_metadata?.assigned_role || 'customer'
 
       const allowedRoles = ['ADMIN', 'SUPERADMIN', 'TRAINER', 'BLOGGER']
       if (role && typeof role === 'string' && allowedRoles.includes(role.toUpperCase())) {
