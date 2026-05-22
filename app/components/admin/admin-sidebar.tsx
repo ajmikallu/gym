@@ -39,7 +39,7 @@ const items = [
     icon: MapPin,
   },
   {
-    title: "Classes & Exercises",
+    title: "Activities & Pricing",
     url: "/admin/exercises",
     icon: Dumbbell,
   },
