@@ -59,7 +59,10 @@ app/
 ├── (user)/                <-- Logged-in User Experience
 │   ├── layout.tsx         (Sidebar, User Nav, Notifications)
 │   ├── dashboard/        
-│   │   └── page.tsx       (URL: /dashboard)
+│   │   ├── page.tsx       (URL: /dashboard)
+│   │   ├── actions.ts     (Server actions for membership CRUD operations)
+│   │   ├── dashboard-client.tsx (Interactive tabs selector dashboard)
+│   │   └── membership-tab.tsx (Premium client CRUD membership tab)
 │   ├── settings/
 │   │   └── page.tsx       (URL: /settings)
 │   └── user/
