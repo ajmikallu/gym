@@ -104,8 +104,10 @@ export async function getMembershipDashboardData() {
       return { success: false, error: "Not authenticated" }
     }
 
+    const adminClient = createAdminClient()
+
     // Fetch user's memberships
-    const { data: memberships, error: mError } = await supabase
+    const { data: memberships, error: mError } = await adminClient
       .from("memberships")
       .select(`
         *,
@@ -119,10 +121,10 @@ export async function getMembershipDashboardData() {
     if (mError) throw mError
 
     // Fetch catalog to subscribe
-    const { data: branches } = await supabase.from("branches").select("*")
-    const { data: activities } = await supabase.from("activities").select("*")
-    const { data: pricings } = await supabase.from("activity_pricing").select("*")
-    const { data: trainers } = await supabase.from("trainers").select("id, name, branch_id, specialization")
+    const { data: branches } = await adminClient.from("branches").select("*")
+    const { data: activities } = await adminClient.from("activities").select("*")
+    const { data: pricings } = await adminClient.from("activity_pricing").select("*")
+    const { data: trainers } = await adminClient.from("trainers").select("id, name, branch_id, specialization")
 
     return {
       success: true,

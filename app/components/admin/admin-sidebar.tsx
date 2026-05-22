@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutDashboard, Users, Dumbbell, Settings, User2, ChevronUp } from "lucide-react"
+import { LayoutDashboard, Users, Dumbbell, Settings, User2, ChevronUp, MapPin } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -34,7 +34,12 @@ const items = [
     icon: Users,
   },
   {
-    title: "Classes & Exercises",
+    title: "Branches",
+    url: "/admin/branches",
+    icon: MapPin,
+  },
+  {
+    title: "Activities & Pricing",
     url: "/admin/exercises",
     icon: Dumbbell,
   },
