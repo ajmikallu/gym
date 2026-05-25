@@ -466,8 +466,11 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                             {catalog.trainers
                               .filter(t =>
                                 t.branch_id === parseInt(selectedBranch) &&
-                                (catalog.trainerActivities || []).some(
-                                  ta => ta.trainer_id === t.id && ta.activity_id === parseInt(selectedActivity)
+                                (!catalog.trainerActivities || catalog.trainerActivities.length === 0
+                                  ? true
+                                  : (catalog.trainerActivities || []).some(
+                                      ta => ta.trainer_id === t.id && ta.activity_id === parseInt(selectedActivity)
+                                    )
                                 )
                               )
                               .map(t => (
@@ -673,8 +676,11 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                                     {catalog.trainers
                                       .filter(t =>
                                         t.branch_id === m.branch_id &&
-                                        (catalog.trainerActivities || []).some(
-                                          ta => ta.trainer_id === t.id && ta.activity_id === m.activity_id
+                                        (!catalog.trainerActivities || catalog.trainerActivities.length === 0
+                                          ? true
+                                          : (catalog.trainerActivities || []).some(
+                                              ta => ta.trainer_id === t.id && ta.activity_id === m.activity_id
+                                            )
                                         )
                                       )
                                       .map(t => (
