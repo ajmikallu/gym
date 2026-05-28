@@ -193,6 +193,7 @@ export async function createMembership(formData: {
     }
 
     revalidatePath("/dashboard")
+    revalidatePath("/dashboard/membership")
     return { success: true, membership: data?.[0] }
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to subscribe." }
@@ -243,6 +244,7 @@ export async function updateMembership(formData: {
     }
 
     revalidatePath("/dashboard")
+    revalidatePath("/dashboard/membership")
     return { success: true }
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to update membership." }
@@ -269,6 +271,7 @@ export async function deleteMembership(membershipId: number) {
     if (error) throw error
 
     revalidatePath("/dashboard")
+    revalidatePath("/dashboard/membership")
     return { success: true }
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to cancel membership." }

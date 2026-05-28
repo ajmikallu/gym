@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, Home, Inbox, Search, Settings, Dumbbell, User2, ChevronUp } from "lucide-react"
+import { Calendar, Home, Inbox, Search, Settings, Dumbbell, User2, ChevronUp, Award, LayoutDashboard } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -24,9 +24,14 @@ import { logout } from "@/app/(auth)/actions"
 // Menu items.
 const items = [
   {
-    title: "Dashboard",
+    title: "Overview",
     url: "/dashboard",
-    icon: Home,
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Membership",
+    url: "/dashboard/membership",
+    icon: Award,
   },
   {
     title: "Settings",
