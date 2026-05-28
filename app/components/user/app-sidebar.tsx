@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { Calendar, Home, Inbox, Search, Settings, Dumbbell, User2, ChevronUp, Award, LayoutDashboard } from "lucide-react"
 import {
   Sidebar,
@@ -21,25 +22,6 @@ import {
 import Link from "next/link"
 import { logout } from "@/app/(auth)/actions"
 
-// Menu items.
-const items = [
-  {
-    title: "Overview",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Membership",
-    url: "/dashboard/membership",
-    icon: Award,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-]
-
 /**
  * AppSidebar Component
  * 
@@ -49,7 +31,34 @@ const items = [
  * 
  * @returns {JSX.Element} The rendered Sidebar component
  */
-export function AppSidebar() {
+export function AppSidebar({ role = "customer" }: { role?: string }) {
+  const items = useMemo(() => {
+    const baseItems = [
+      {
+        title: "Overview",
+        url: "/dashboard",
+        icon: LayoutDashboard,
+      },
+    ]
+
+    // Only expose Membership to customers
+    if (role === "customer") {
+      baseItems.push({
+        title: "Membership",
+        url: "/dashboard/membership",
+        icon: Award,
+      })
+    }
+
+    baseItems.push({
+      title: "Settings",
+      url: "/settings",
+      icon: Settings,
+    })
+
+    return baseItems
+  }, [role])
+
   return (
     <Sidebar variant="sidebar" collapsible="icon">
       <SidebarContent>
