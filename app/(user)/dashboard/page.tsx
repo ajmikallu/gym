@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/app/components/ui/card"
 import { Activity } from "lucide-react"
-import { getMembershipDashboardData } from "./actions"
 import { DashboardClient } from "./dashboard-client"
 
 /**
@@ -16,7 +15,7 @@ import { DashboardClient } from "./dashboard-client"
  * 
  * The main landing page for authenticated users.
  * Fetches the current user session from Supabase, checks role-based access,
- * and renders the interactive dashboard client with modular Overview/Membership views.
+ * and renders the interactive dashboard client with the Overview dashboard.
  * 
  * @returns {Promise<JSX.Element>} The rendered Dashboard page
  */
@@ -34,18 +33,6 @@ export default async function DashboardPage() {
   // Safe, pre-verified server-side role retrieval
   const role = user?.app_metadata?.assigned_role || user?.role || "customer"
   const isCustomer = role === "customer"
-
-  // Fetch membership database details for customers
-  let memberships: any[] = []
-  let catalog: any = { branches: [], activities: [], pricings: [], trainers: [] }
-
-  if (isCustomer) {
-    const dataRes = await getMembershipDashboardData()
-    if (dataRes.success) {
-      memberships = dataRes.memberships || []
-      catalog = dataRes.catalog || catalog
-    }
-  }
 
   // Pre-render static-styled components to feed into the Client Tab layout
   const recentActivity = (
@@ -101,8 +88,6 @@ export default async function DashboardPage() {
     <DashboardClient
       fullName={fullName}
       isCustomer={isCustomer}
-      initialMemberships={memberships}
-      catalog={catalog}
       recentActivity={recentActivity}
       upcomingSchedule={upcomingSchedule}
     />

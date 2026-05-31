@@ -125,6 +125,7 @@ export async function getMembershipDashboardData() {
     const { data: activities } = await adminClient.from("activities").select("*")
     const { data: pricings } = await adminClient.from("activity_pricing").select("*")
     const { data: trainers } = await adminClient.from("trainers").select("id, name, branch_id, specialization")
+    const { data: trainerActivities } = await adminClient.from("trainer_activities").select("trainer_id, activity_id")
 
     return {
       success: true,
@@ -133,7 +134,8 @@ export async function getMembershipDashboardData() {
         branches: branches || [],
         activities: activities || [],
         pricings: pricings || [],
-        trainers: trainers || []
+        trainers: trainers || [],
+        trainerActivities: trainerActivities || []
       }
     }
   } catch (error: any) {
@@ -191,6 +193,7 @@ export async function createMembership(formData: {
     }
 
     revalidatePath("/dashboard")
+    revalidatePath("/dashboard/membership")
     return { success: true, membership: data?.[0] }
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to subscribe." }
@@ -241,6 +244,7 @@ export async function updateMembership(formData: {
     }
 
     revalidatePath("/dashboard")
+    revalidatePath("/dashboard/membership")
     return { success: true }
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to update membership." }
@@ -267,6 +271,7 @@ export async function deleteMembership(membershipId: number) {
     if (error) throw error
 
     revalidatePath("/dashboard")
+    revalidatePath("/dashboard/membership")
     return { success: true }
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to cancel membership." }

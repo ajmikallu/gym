@@ -36,6 +36,7 @@ interface Catalog {
   activities: Array<{ id: number; name: string; description: string; allows_pt: boolean }>
   pricings: Array<{ id: number; activity_id: number; branch_id: number; duration_days: number; base_price: number; pt_addon_price: number }>
   trainers: Array<{ id: number; name: string; branch_id: number; specialization: string }>
+  trainerActivities?: Array<{ trainer_id: number; activity_id: number }>
 }
 
 interface Membership {
@@ -63,7 +64,7 @@ interface MembershipTabProps {
 export function MembershipTab({ initialMemberships, catalog }: MembershipTabProps) {
   const [isPending, startTransition] = useTransition()
   const [memberships, setMemberships] = useState<Membership[]>(initialMemberships)
-  
+
   // Create Membership state
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [selectedBranch, setSelectedBranch] = useState<string>("")
@@ -137,7 +138,7 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
 
       if (res.success) {
         setMessage({ type: "success", text: "Successfully subscribed! Welcome to ApexFit." })
-        
+
         // Fetch new lists
         const newM: Membership = {
           id: res.membership.id,
@@ -156,7 +157,7 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
           trainer: catalog.trainers.find(t => t.id === res.membership.trainer_id)
         }
         setMemberships([newM, ...memberships])
-        
+
         // Reset state
         setShowCreateForm(false)
         setSelectedBranch("")
@@ -273,14 +274,13 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      
+
       {/* Alert Header Notification */}
       {message && (
-        <div className={`p-4 rounded-xl border flex items-start gap-3 shadow-sm transition-all duration-300 animate-in slide-in-from-top-2 ${
-          message.type === "success" 
-            ? "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-400" 
-            : "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900/50 text-rose-800 dark:text-rose-400"
-        }`}>
+        <div className={`p-4 rounded-xl border flex items-start gap-3 shadow-sm transition-all duration-300 animate-in slide-in-from-top-2 ${message.type === "success"
+          ? "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-400"
+          : "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900/50 text-rose-800 dark:text-rose-400"
+          }`}>
           {message.type === "success" ? (
             <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
           ) : (
@@ -309,7 +309,7 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
         </div>
 
         {!showCreateForm && (
-          <Button 
+          <Button
             onClick={() => setShowCreateForm(true)}
             className="bg-orange-600 text-white hover:bg-orange-700 font-semibold gap-2 shadow-md transition-all duration-200"
           >
@@ -330,9 +330,9 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
               </CardTitle>
               <CardDescription className="text-xs">Configure your gym tier, branch location, start dates, and personal coaches.</CardDescription>
             </div>
-            <Button 
-              type="button" 
-              variant="ghost" 
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => setShowCreateForm(false)}
               className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
             >
@@ -341,10 +341,10 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
           </CardHeader>
           <form onSubmit={handlePurchase}>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
-              
+
               {/* Select Branch and Activity */}
               <div className="space-y-4">
-                
+
                 {/* Branch Selection */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-zinc-500 block">Select Gym Branch</label>
@@ -420,11 +420,10 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                         key={item.days}
                         type="button"
                         onClick={() => setSelectedDuration(item.days)}
-                        className={`py-2 px-3 text-xs font-bold border rounded-xl transition-all duration-200 ${
-                          selectedDuration === item.days
-                            ? "bg-orange-600 border-orange-600 text-white shadow-sm"
-                            : "bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50"
-                        }`}
+                        className={`py-2 px-3 text-xs font-bold border rounded-xl transition-all duration-200 ${selectedDuration === item.days
+                          ? "bg-orange-600 border-orange-600 text-white shadow-sm"
+                          : "bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50"
+                          }`}
                       >
                         {item.label}
                       </button>
@@ -436,7 +435,7 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
 
               {/* PT Addon Details & Dynamic Billing Calculation */}
               <div className="space-y-6 p-5 bg-zinc-50/50 dark:bg-zinc-950/20 border border-zinc-200/50 dark:border-zinc-900 rounded-2xl flex flex-col justify-between">
-                
+
                 {/* PT Addon Selection */}
                 <div className="space-y-4">
                   {selectedActivity && catalog.activities.find(a => a.id === parseInt(selectedActivity))?.allows_pt ? (
@@ -465,7 +464,15 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                           >
                             <option value="">-- Choose Coach --</option>
                             {catalog.trainers
-                              .filter(t => t.branch_id === parseInt(selectedBranch))
+                              .filter(t =>
+                                t.branch_id === parseInt(selectedBranch) &&
+                                (!catalog.trainerActivities || catalog.trainerActivities.length === 0
+                                  ? true
+                                  : (catalog.trainerActivities || []).some(
+                                      ta => ta.trainer_id === t.id && ta.activity_id === parseInt(selectedActivity)
+                                    )
+                                )
+                              )
                               .map(t => (
                                 <option key={t.id} value={t.id}>{t.name} ({t.specialization})</option>
                               ))}
@@ -507,8 +514,8 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
             </CardContent>
             <CardFooter className="border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/20 px-6 py-4 flex items-center justify-between">
               <span className="text-xs text-zinc-400">Instantly activated upon confirmation.</span>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={isPending || !selectedBranch || !selectedActivity}
                 className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-6 shadow-md transition-all duration-200"
               >
@@ -528,7 +535,7 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
             <p className="text-xs text-zinc-500 max-w-sm mt-1">
               Select one of ApexFit's state of the art programs to purchase your first membership.
             </p>
-            <Button 
+            <Button
               onClick={() => setShowCreateForm(true)}
               className="mt-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs py-2 px-4 shadow-sm"
             >
@@ -548,13 +555,12 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
               const editTotal = editBase + (editHasPt ? editPtVal : 0)
 
               return (
-                <Card 
-                  key={m.id} 
-                  className={`shadow-md hover:shadow-lg transition-all duration-300 border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden relative ${
-                    isExpired ? "opacity-60 grayscale-[40%]" : "bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md"
-                  }`}
+                <Card
+                  key={m.id}
+                  className={`shadow-md hover:shadow-lg transition-all duration-300 border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden relative ${isExpired ? "opacity-60 grayscale-[40%]" : "bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md"
+                    }`}
                 >
-                  
+
                   {/* Status Tag Overlay */}
                   <div className="absolute right-4 top-4">
                     {getStatusBadge(m)}
@@ -572,7 +578,7 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                   </CardHeader>
 
                   <CardContent className="space-y-4 pt-4 text-xs text-zinc-600 dark:text-zinc-400">
-                    
+
                     {/* Program Duration & Purchase Date Metadata */}
                     <div className="flex items-center justify-between text-[11px] font-bold text-zinc-400 border-b border-zinc-100 dark:border-zinc-800 pb-2">
                       <span className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded text-zinc-600 dark:text-zinc-300">
@@ -587,7 +593,7 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                     {/* Date Metrics or Edit Term Inputs */}
                     {isEditing ? (
                       <div className="space-y-3 p-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-900 rounded-xl animate-in slide-in-from-top-2 duration-150">
-                        
+
                         {/* Edit Start Date */}
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold text-zinc-400 block uppercase">Plan Activation Date</label>
@@ -609,11 +615,10 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                                 key={days}
                                 type="button"
                                 onClick={() => setEditDuration(days)}
-                                className={`py-1.5 px-2 text-[10px] font-bold border rounded-lg transition-all duration-150 ${
-                                  editDuration === days
-                                    ? "bg-zinc-900 border-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-950 shadow-sm"
-                                    : "bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50"
-                                }`}
+                                className={`py-1.5 px-2 text-[10px] font-bold border rounded-lg transition-all duration-150 ${editDuration === days
+                                  ? "bg-zinc-900 border-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-950 shadow-sm"
+                                  : "bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50"
+                                  }`}
                               >
                                 {days} Days
                               </button>
@@ -638,10 +643,10 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                     {/* PT Addon Details or Editing */}
                     <div className="border-t border-zinc-100 dark:border-zinc-800/80 pt-3 space-y-2">
                       <span className="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block">Personal Coaching Support</span>
-                      
+
                       {isEditing ? (
                         <div className="space-y-3 p-3 bg-orange-50/20 dark:bg-orange-950/5 border border-orange-200/40 dark:border-orange-900/30 rounded-xl animate-in slide-in-from-top-2 duration-150">
-                          
+
                           {/* Edit Checkbox */}
                           {m.activity?.allows_pt ? (
                             <>
@@ -669,7 +674,15 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
                                   >
                                     <option value="">-- Choose Coach --</option>
                                     {catalog.trainers
-                                      .filter(t => t.branch_id === m.branch_id)
+                                      .filter(t =>
+                                        t.branch_id === m.branch_id &&
+                                        (!catalog.trainerActivities || catalog.trainerActivities.length === 0
+                                          ? true
+                                          : (catalog.trainerActivities || []).some(
+                                              ta => ta.trainer_id === t.id && ta.activity_id === m.activity_id
+                                            )
+                                        )
+                                      )
                                       .map(t => (
                                         <option key={t.id} value={t.id}>{t.name} ({t.specialization})</option>
                                       ))}
@@ -691,18 +704,18 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
 
                           {/* Action controls */}
                           <div className="flex justify-end gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                            <Button 
-                              type="button" 
-                              variant="ghost" 
-                              size="sm" 
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
                               onClick={() => setEditingMembershipId(null)}
                               className="h-8 text-zinc-500 text-xs px-2.5"
                             >
                               Cancel
                             </Button>
-                            <Button 
-                              type="button" 
-                              size="sm" 
+                            <Button
+                              type="button"
+                              size="sm"
                               disabled={isPending}
                               onClick={() => handleUpdate(m)}
                               className="h-8 bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 text-xs px-3 font-semibold"
@@ -728,9 +741,9 @@ export function MembershipTab({ initialMemberships, catalog }: MembershipTabProp
 
                           {/* UPDATE Action Button */}
                           {!isExpired && (
-                            <Button 
-                              type="button" 
-                              variant="outline" 
+                            <Button
+                              type="button"
+                              variant="outline"
                               size="sm"
                               onClick={() => {
                                 setEditingMembershipId(m.id)
