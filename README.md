@@ -47,28 +47,40 @@ Follow this step-by-step checklist to implement the new role correctly:
 
 Run the following queries inside your Supabase SQL Editor:
 
-1. **Add the new role value to the `public.app_role` enum:**
+1. **Add the new role value to the `public.app_role` enum safely:**
    ```sql
-   ALTER TYPE public.app_role ADD VALUE 'manager';
+   DO $$
+   BEGIN
+     IF NOT EXISTS (
+       SELECT 1 FROM pg_type t 
+       JOIN pg_enum e ON t.oid = e.enumtypid 
+       WHERE t.typname = 'app_role' AND e.enumlabel = 'manager'
+     ) THEN
+       ALTER TYPE public.app_role ADD VALUE 'manager';
+     END IF;
+   END
+   $$;
    ```
 
 2. **Configure Role Permissions:**
-   Map the capabilities the role has by inserting rows into the `public.role_permissions` table:
+   Map the capabilities the role has by inserting rows into the `public.role_permissions` table (using `ON CONFLICT DO NOTHING` to prevent errors on multiple runs):
    ```sql
    INSERT INTO public.role_permissions (role, permission) VALUES
      ('manager', 'branches.read'),
      ('manager', 'memberships.read'),
      ('manager', 'slots.read'),
-     ('manager', 'bookings.read');
+     ('manager', 'bookings.read')
+   ON CONFLICT (role, permission) DO NOTHING;
    ```
    *(Check `public.app_permission` in `schema.sql` for the complete list of system permissions).*
 
 3. **Define Creation Hierarchies:**
-   Configure which existing roles are permitted to register or create accounts of this role inside the `public.role_hierarchy` table:
+   Configure which existing roles are permitted to register or create accounts of this role inside the `public.role_hierarchy` table safely:
    ```sql
    INSERT INTO public.role_hierarchy (creator_role, creatable_role) VALUES
      ('superadmin', 'manager'),
-     ('admin', 'manager');
+     ('admin', 'manager')
+   ON CONFLICT (creator_role, creatable_role) DO NOTHING;
    ```
 
 ---
