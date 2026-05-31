@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutDashboard, Users, Dumbbell, Settings, User2, ChevronUp, MapPin } from "lucide-react"
+import { LayoutDashboard, Users, Dumbbell, Settings, User2, ChevronUp, MapPin, User } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -81,6 +81,12 @@ export function AdminSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem className="mb-2">
+            <SidebarMenuButton render={<Link href="/dashboard" />} className="h-11 border border-orange-200 dark:border-orange-950 bg-orange-600/10 hover:bg-orange-600/20 text-orange-600 dark:bg-orange-500/10 dark:hover:bg-orange-500/20 dark:text-orange-400 font-bold transition-all">
+              <User className="w-5 h-5 mr-2" />
+              <span className="truncate flex-1 text-left">Switch to User View</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger render={
