@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
 import { SidebarProvider, SidebarTrigger } from "@/app/components/ui/sidebar";
 import { AdminSidebar } from "@/app/components/admin/admin-sidebar";
+import { hasAdminAccess } from "@/app/lib/roles";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -17,9 +18,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // This avoids manually decoding the JWT in your layout again
   const role = user.app_metadata?.assigned_role;
 
-  const allowedRoles = ["ADMIN", "SUPERADMIN", "TRAINER", "BLOGGER"];
-
-  if (!role || typeof role !== 'string' || !allowedRoles.includes(role.toUpperCase())) {
+  if (!hasAdminAccess(role)) {
     redirect("/dashboard");
   }
 

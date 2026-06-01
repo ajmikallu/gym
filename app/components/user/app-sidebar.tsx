@@ -1,7 +1,8 @@
 "use client"
 
 import { useMemo } from "react"
-import { Calendar, Home, Inbox, Search, Settings, Dumbbell, User2, ChevronUp, Award, LayoutDashboard } from "lucide-react"
+import { Calendar, Home, Inbox, Search, Settings, Dumbbell, User2, ChevronUp, Award, LayoutDashboard, Shield } from "lucide-react"
+import { hasAdminAccess } from "@/app/lib/roles"
 import {
   Sidebar,
   SidebarContent,
@@ -81,6 +82,14 @@ export function AppSidebar({ role = "customer" }: { role?: string }) {
 
       <SidebarFooter>
         <SidebarMenu>
+          {hasAdminAccess(role) && (
+            <SidebarMenuItem className="mb-2">
+              <SidebarMenuButton render={<Link href="/admin" />} className="h-11 border border-orange-200 dark:border-orange-950 bg-orange-600/10 hover:bg-orange-600/20 text-orange-600 dark:bg-orange-500/10 dark:hover:bg-orange-500/20 dark:text-orange-400 font-bold transition-all">
+                <Shield className="w-5 h-5 mr-2" />
+                <span className="truncate flex-1 text-left">Switch to Admin View</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger render={

@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/app/lib/supabase/server'
 import { log } from 'console'
 import { jwtDecode } from 'jwt-decode'
+import { hasAdminAccess } from '@/app/lib/roles'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -31,8 +32,7 @@ export async function login(formData: FormData) {
       const role = payload.app_metadata?.assigned_role || 'customer'
       console.log('Extracted role:', role)
 
-      const allowedRoles = ['ADMIN', 'SUPERADMIN', 'TRAINER', 'BLOGGER']
-      if (role && typeof role === 'string' && allowedRoles.includes(role.toUpperCase())) {
+      if (hasAdminAccess(role)) {
         redirectTo = '/admin'
       }
     } catch (e) {
@@ -71,8 +71,7 @@ export async function register(formData: FormData) {
       const payload = jwtDecode(authData.session.access_token) as any
       const role = payload.app_metadata?.assigned_role || 'customer'
 
-      const allowedRoles = ['ADMIN', 'SUPERADMIN', 'TRAINER', 'BLOGGER']
-      if (role && typeof role === 'string' && allowedRoles.includes(role.toUpperCase())) {
+      if (hasAdminAccess(role)) {
         isAdmin = true
       }
     } catch (e) {
