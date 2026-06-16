@@ -106,11 +106,14 @@ export function AppSidebar({ role = "customer" }: { role?: string }) {
                 <DropdownMenuItem render={<Link href="/user/profile">Account Profile</Link>} />
                 <DropdownMenuItem render={<Link href="/settings">Billing</Link>} />
                 <form action={logout}>
-                  <DropdownMenuItem render={
-                    <button type="submit" className="w-full text-left text-red-600 font-medium">
-                      Sign out
-                    </button>
-                  } />
+                  <DropdownMenuItem
+                    nativeButton
+                    render={
+                      <button type="submit" className="w-full text-left text-red-600 font-medium">
+                        Sign out
+                      </button>
+                    }
+                  />
                 </form>
               </DropdownMenuContent>
             </DropdownMenu>

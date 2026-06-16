@@ -101,11 +101,14 @@ export function AdminSidebar() {
                 className="w-[--radix-popper-anchor-width]"
               >
                 <form action={logout}>
-                  <DropdownMenuItem render={
-                    <button type="submit" className="w-full text-left text-red-600 font-medium">
-                      Sign out
-                    </button>
-                  } />
+                  <DropdownMenuItem
+                    nativeButton
+                    render={
+                      <button type="submit" className="w-full text-left text-red-600 font-medium">
+                        Sign out
+                      </button>
+                    }
+                  />
                 </form>
               </DropdownMenuContent>
             </DropdownMenu>
