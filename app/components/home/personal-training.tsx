@@ -57,13 +57,13 @@ export default function PersonalTraining() {
       className="relative w-full py-28 bg-white dark:bg-black transition-colors duration-700 overflow-hidden"
     >
       {/* Scoped CSS Keyframes for self-contained animations */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style jsx>{`
         @keyframes shine-sweep {
           0% { transform: skewX(-20deg) translateX(-150%); }
           50% { transform: skewX(-20deg) translateX(250%); }
           100% { transform: skewX(-20deg) translateX(250%); }
         }
-      `}} />
+      `}</style>
 
       {/* Subtle ambient gradients */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-3xl pointer-events-none" />

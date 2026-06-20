@@ -65,7 +65,7 @@ export default function BoxingSection() {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full py-28 bg-zinc-950 text-white overflow-hidden"
+      className="group relative w-full py-28 bg-zinc-950 text-white overflow-hidden"
     >
       {/* Scoped CSS Keyframe animation for CTA shine */}
       <style dangerouslySetInnerHTML={{ __html: `

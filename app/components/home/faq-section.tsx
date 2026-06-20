@@ -92,7 +92,7 @@ export default function FaqSection() {
                 key={index}
                 value={value}
                 style={{
-                  transitionDelay: isVisible ? "0ms" : `${300 + index * 100}ms`
+                  transitionDelay: isVisible ? `${300 + index * 100}ms` : "0ms"
                 }}
                 className={`group border rounded-2xl overflow-hidden bg-white/50 dark:bg-black/40 border-zinc-200 dark:border-zinc-800 data-open:bg-white data-open:dark:bg-zinc-900 data-open:border-orange-500 data-open:shadow-lg data-open:shadow-orange-600/5 hover:border-orange-500/50 transform transition-all duration-700 ${
                   isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"

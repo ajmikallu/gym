@@ -87,7 +87,7 @@ function MissionVisionCard({ index, icon, title, description, delayClass, isVisi
             </span>
           </div>
 
-          <span className="text-sm font-mono font-extrabold text-zinc-350 dark:text-zinc-700 select-none">
+          <span className="text-sm font-mono font-extrabold text-zinc-400 dark:text-zinc-700 select-none">
             {index}
           </span>
         </div>
@@ -158,8 +158,8 @@ export default function MissionVision() {
       className="relative w-full py-28 bg-white dark:bg-black overflow-hidden transition-colors duration-700 group/section"
     >
       {/* Decorative ambient gradients */}
-      <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-red-600/5 dark:bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-zinc-400/5 dark:bg-zinc-850/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-[10%] w-96 h-96 bg-red-600/5 dark:bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-[10%] w-96 h-96 bg-zinc-400/5 dark:bg-zinc-800/15 rounded-full blur-3xl pointer-events-none" />
 
       {/* Grid Pattern Background overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none opacity-60" />
