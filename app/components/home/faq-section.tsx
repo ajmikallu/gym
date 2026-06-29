@@ -64,6 +64,13 @@ export default function FaqSection() {
   return (
     <section ref={sectionRef} className="w-full py-24 bg-zinc-50 dark:bg-zinc-950 transition-colors duration-500 relative overflow-hidden">
 
+      {/* Sliding Diagonals Background Effect */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="faq-diagonal-bg faq-diagonal-bg-1" />
+        <div className="faq-diagonal-bg faq-diagonal-bg-2" />
+        <div className="faq-diagonal-bg faq-diagonal-bg-3" />
+      </div>
+
       {/* Background Accents */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-orange-600/5 blur-[120px] rounded-full pointer-events-none" />
 
