@@ -2,6 +2,12 @@
 
 import * as React from "react";
 import { Plus, Minus, HelpCircle } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const faqs = [
   {
@@ -27,14 +33,43 @@ const faqs = [
 ];
 
 export default function FaqSection() {
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+  const [isVisible, setIsVisible] = React.useState(false);
+  const sectionRef = React.useRef<HTMLDivElement>(null);
 
-  const toggleFaq = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+      }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
 
   return (
-    <section className="w-full py-24 bg-zinc-50 dark:bg-zinc-950 transition-colors duration-500 relative overflow-hidden">
+    <section ref={sectionRef} className="w-full py-24 bg-zinc-50 dark:bg-zinc-950 transition-colors duration-500 relative overflow-hidden">
+
+      {/* Sliding Diagonals Background Effect */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="faq-diagonal-bg faq-diagonal-bg-1" />
+        <div className="faq-diagonal-bg faq-diagonal-bg-2" />
+        <div className="faq-diagonal-bg faq-diagonal-bg-3" />
+      </div>
 
       {/* Background Accents */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-orange-600/5 blur-[120px] rounded-full pointer-events-none" />
@@ -43,57 +78,53 @@ export default function FaqSection() {
 
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center p-3 bg-orange-600/10 text-orange-600 rounded-full mb-6">
+          <div className={`inline-flex items-center justify-center p-3 bg-orange-600/10 text-orange-600 rounded-full mb-6 transition-all duration-700 transform ${isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-6 opacity-0 scale-75"}`}>
             <HelpCircle className="w-8 h-8" />
           </div>
-          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tighter text-black dark:text-white uppercase italic mb-6 transition-colors duration-500">
+          <h2 className={`text-3xl md:text-5xl font-extrabold tracking-tighter text-black dark:text-white uppercase italic mb-6 transition-colors duration-500 transition-all duration-700 delay-100 transform ${isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}>
             Frequently Asked <span className="text-orange-600">Questions</span>
           </h2>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400 font-medium">
+          <p className={`text-lg text-zinc-600 dark:text-zinc-400 font-medium transition-all duration-700 delay-200 transform ${isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}>
             Everything you need to know about training at ApexFit.
           </p>
         </div>
 
         {/* FAQ Accordion */}
-        <div className="flex flex-col gap-4">
+        <Accordion className="flex flex-col gap-4">
           {faqs.map((faq, index) => {
-            const isOpen = openIndex === index;
+            const value = `item-${index}`;
 
             return (
-              <div
+              <AccordionItem
                 key={index}
-                className={`group border rounded-2xl transition-all duration-500 overflow-hidden ${isOpen
-                    ? "bg-white dark:bg-zinc-900 border-orange-500 shadow-lg shadow-orange-600/5"
-                    : "bg-white/50 dark:bg-black/40 border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50"
-                  }`}
+                value={value}
+                style={{
+                  transitionDelay: isVisible ? `${300 + index * 100}ms` : "0ms"
+                }}
+                className={`group border rounded-2xl overflow-hidden bg-white/50 dark:bg-black/40 border-zinc-200 dark:border-zinc-800 data-open:bg-white data-open:dark:bg-zinc-900 data-open:border-orange-500 data-open:shadow-lg data-open:shadow-orange-600/5 hover:border-orange-500/50 transform transition-all duration-700 ${
+                  isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+                }`}
               >
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="w-full px-6 md:px-8 py-6 flex items-center justify-between text-left focus:outline-none"
-                >
-                  <h3 className={`text-lg md:text-xl font-bold uppercase tracking-wide pr-8 transition-colors duration-300 ${isOpen ? "text-orange-600" : "text-zinc-900 dark:text-zinc-100 group-hover:text-orange-600"}`}>
+                <AccordionTrigger className="w-full px-6 md:px-8 py-6 flex items-center justify-between text-left focus:outline-none hover:no-underline [&_[data-slot=accordion-trigger-icon]]:hidden">
+                  <span className="text-lg md:text-xl font-bold uppercase tracking-wide pr-8 transition-colors duration-300 text-zinc-900 dark:text-zinc-100 group-hover/accordion-trigger:text-orange-600 group-aria-expanded/accordion-trigger:text-orange-600">
                     {faq.question}
-                  </h3>
-                  <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${isOpen ? "bg-orange-600 text-white rotate-180" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 group-hover:bg-orange-600/20 group-hover:text-orange-600"}`}>
-                    {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                  </span>
+                  <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 group-hover/accordion-trigger:bg-orange-600/20 group-hover/accordion-trigger:text-orange-600 group-aria-expanded/accordion-trigger:bg-orange-600 group-aria-expanded/accordion-trigger:text-white group-aria-expanded/accordion-trigger:rotate-180">
+                    <Plus className="w-5 h-5 pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden" />
+                    <Minus className="w-5 h-5 pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline" />
                   </div>
-                </button>
+                </AccordionTrigger>
 
-                <div
-                  className={`grid transition-all duration-500 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="px-6 md:px-8 pb-8 text-zinc-600 dark:text-zinc-400 leading-relaxed text-base md:text-lg">
-                      {faq.answer}
-                    </p>
-                  </div>
-                </div>
-              </div>
+                <AccordionContent className="px-6 md:px-8 pb-8 text-zinc-600 dark:text-zinc-400 leading-relaxed text-base md:text-lg">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
             );
           })}
-        </div>
+        </Accordion>
 
       </div>
     </section>
   );
 }
+
